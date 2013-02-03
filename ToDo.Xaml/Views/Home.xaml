@@ -34,11 +34,11 @@
                             <Grid Height="20" Margin="5,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="25" />
-                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="300" />
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="50" />
-                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="50" />
                                     <ColumnDefinition Width="50" />
                                 </Grid.ColumnDefinitions>
@@ -51,16 +51,20 @@
                                 <TextBlock Grid.Column="2" Text="{Binding DueDate, StringFormat='d'}" Style="{StaticResource GridNormalTextStyle}"/>
                                 <TextBlock Grid.Column="3" Text="{Binding ReminderDate, StringFormat='d'}" Style="{StaticResource GridNormalTextStyle}"/>
                                 <TextBlock Grid.Column="4" Text="{Binding Category.Description}" Style="{StaticResource GridNormalTextStyle}"/>
-                                <TextBlock Grid.Column="5" Text="{Binding Priority.Description}" Style="{StaticResource GridNormalTextStyle}" HorizontalAlignment="Right"/>
-                                <Button Grid.Column="6" Content="Edit" Width="45" HorizontalAlignment="Right" />
-                                <Button Grid.Column="7" Content="Delete" Width="45" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="5" Text="{Binding Priority.Description}" Style="{StaticResource GridNormalTextStyle}"/>
+                                <Button Grid.Column="6" Content="Edit" Command="{Binding ElementName=LayoutRoot, Path=DataContext.EditToDoCommand}" 
+                                        CommandParameter="{Binding .}" Width="45" HorizontalAlignment="Right" />
+                                <Button Grid.Column="7" Content="Delete" Command="{Binding ElementName=LayoutRoot, Path=DataContext.DeleteToDoCommand}" 
+                                        CommandParameter="{Binding .}" Width="45" HorizontalAlignment="Right" />
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
 
             </Grid>            
-        </ScrollViewer>
+        </ScrollViewer>        
     </Grid>
+    
+
 
 </navigation:Page>

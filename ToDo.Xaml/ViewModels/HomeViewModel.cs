@@ -1,27 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight.Command;
 using ToDo.Xaml.Clients;
+using ToDo.Xaml.Impl;
+using ToDo.Xaml.Views;
 
 namespace ToDo.Xaml.ViewModels
 {
     public class HomeViewModel : GalaSoft.MvvmLight.ViewModelBase
     {
+        private IToDoClient _toDoClient = new ToDoClient();
+        private IModalDialogService _modalDialogService = new ModalDialogService();
+
         private IList<Models.ToDo> _rawToDoItemsList = new List<Models.ToDo>();
         private ObservableCollection<Models.ToDo> _toDoItems;
         private string _filterText;
-        private IToDoClient _toDoClient = new ToDoClient();
         private RelayCommand _filterToDoCommand;
+        private RelayCommand<Models.ToDo> _editToDoCommand;
+        private RelayCommand<Models.ToDo> _deleteToDoCommand;
 
         private void RefreshToDoItems()
         {
-
             _toDoClient.SchduledToDos((results) =>
                 {
                     _rawToDoItemsList = new List<Models.ToDo>(results);
-                    _toDoItems = new ObservableCollection<Models.ToDo>(_rawToDoItemsList);
-                    
+   
+                    foreach (var toDo in _rawToDoItemsList)
+                    {
+                        _toDoItems.Add(toDo);
+                    }
                 });
         }
 
@@ -33,7 +43,6 @@ namespace ToDo.Xaml.ViewModels
                 {
                     _toDoItems = new ObservableCollection<Models.ToDo>();
                     RefreshToDoItems();
-                    
                 }
 
                 return _toDoItems;
@@ -50,7 +59,51 @@ namespace ToDo.Xaml.ViewModels
                 RaisePropertyChanged(() => FilterText);
 
                 FilterToDoCommand.RaiseCanExecuteChanged();
+
+                if (string.IsNullOrEmpty(_filterText))
+                {
+                    FilterToDo();
+                }
             }
+        }
+
+        public RelayCommand<Models.ToDo> EditToDoCommand
+        {
+            get { return _editToDoCommand ?? (_editToDoCommand = new RelayCommand<Models.ToDo>(EditToDo)); }
+        }
+
+        private void EditToDo(Models.ToDo toDoToEdit)
+        {
+            _modalDialogService.ShowDialog<MaintainToDoItemChildWindow>(new MaintainToDoItemViewModel(toDoToEdit), result =>
+                {
+                    if (result.HasValue && result.Value)
+                    {
+                        RefreshToDoItems();
+                    }
+                });
+          
+        }
+
+        public RelayCommand<Models.ToDo> DeleteToDoCommand
+        {
+            get { return _deleteToDoCommand ?? (_deleteToDoCommand = new RelayCommand<Models.ToDo>(DeleteToDo)); }
+        }
+
+        private void DeleteToDo(Models.ToDo toDo)
+        {
+            _toDoClient.DeleteToDo(toDo.Id, (result) =>
+                {
+                    if (result)
+                    {
+                        var foundMatch = _rawToDoItemsList.FirstOrDefault(x => x.Id == toDo.Id);
+
+                        if (foundMatch != null)
+                        {
+                            _rawToDoItemsList.Remove(foundMatch);
+                            _toDoItems.Remove(foundMatch);
+                        }
+                    }
+                });
         }
 
         public RelayCommand FilterToDoCommand

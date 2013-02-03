@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Threading;
 
 namespace ToDo.Xaml
 {
@@ -20,6 +21,7 @@ namespace ToDo.Xaml
             this.UnhandledException += this.Application_UnhandledException;
 
             InitializeComponent();
+            DispatcherHelper.Initialize();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)

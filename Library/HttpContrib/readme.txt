@@ -1,0 +1,1 @@
+http://uicraftsman.com/blog/2011/01/23/consuming-wcf-web-rest-apis-in-silverlight/
