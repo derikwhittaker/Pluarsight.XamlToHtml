@@ -13,6 +13,7 @@ namespace ToDo.Xaml.ViewModels
     public class HomeViewModel : GalaSoft.MvvmLight.ViewModelBase
     {
         private IToDoClient _toDoClient = new ToDoClient();
+        private IMetaClient _metaClient = new MetaClient();
         private IModalDialogService _modalDialogService = new ModalDialogService();
 
         private IList<Models.ToDo> _rawToDoItemsList = new List<Models.ToDo>();
@@ -74,7 +75,7 @@ namespace ToDo.Xaml.ViewModels
 
         private void EditToDo(Models.ToDo toDoToEdit)
         {
-            _modalDialogService.ShowDialog<MaintainToDoItemChildWindow>(new MaintainToDoItemViewModel(toDoToEdit), result =>
+            _modalDialogService.ShowDialog<MaintainToDoItemChildWindow>(new MaintainToDoItemViewModel(_metaClient, toDoToEdit), result =>
                 {
                     if (result.HasValue && result.Value)
                     {

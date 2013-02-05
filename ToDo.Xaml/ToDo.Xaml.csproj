@@ -124,6 +124,7 @@
     </Compile>
     <Compile Include="Assets\WatermarkedTextBox.cs" />
     <Compile Include="Behaviors\TextBoxUpdateOnChangeBehavior.cs" />
+    <Compile Include="Clients\MetaClient.cs" />
     <Compile Include="Clients\ToDoClient.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\StateToEllipseConverter.cs" />

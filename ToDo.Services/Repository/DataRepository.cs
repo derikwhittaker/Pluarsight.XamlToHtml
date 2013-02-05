@@ -10,6 +10,9 @@ namespace ToDo.Services.Repository
     {
         IList<Models.ToDo> ActiveItems();
         void Delete(int id);
+        IEnumerable<Priority> Properties();
+        IEnumerable<Category> Categories();
+        IEnumerable<Status> Statuses();
     }
 
     public class DataRepository : IDataRepository
@@ -33,7 +36,7 @@ namespace ToDo.Services.Repository
 
         public IList<Models.ToDo> ActiveItems()
         {
-            return _inMemeoryToDo.Where(x => x.State != State.Completed).OrderBy(x => x.DueDate).ToList();
+            return _inMemeoryToDo.Where(x => x.Status.Id != (int)State.Completed).OrderBy(x => x.DueDate).ToList();
         }
 
         public void Delete(int id)
@@ -46,6 +49,38 @@ namespace ToDo.Services.Repository
             }
         }
 
+        public IEnumerable<Priority> Properties()
+        {
+            return new List<Priority>
+                {
+                    new Priority{Id = 1, Description = "Normal"},
+                    new Priority{Id = 2, Description = "Medium"},
+                    new Priority{Id = 3, Description = "High"},
+                    new Priority{Id = 4, Description = "Critical"},
+                };
+        }
+
+        public IEnumerable<Category> Categories()
+        {
+            return new List<Category>
+                {
+                    new Category{Id = 1, Description = "Honey Do"},
+                    new Category{Id = 2, Description = "Quality"},
+                    new Category{Id = 3, Description = "Personal"},
+                    new Category{Id = 4, Description = "Punishment"},
+                };
+        }
+
+        public IEnumerable<Status> Statuses()
+        {
+            return new List<Status>
+                {
+                    new Status{Id = (int)State.Active, Description = "Active"},
+                    new Status{Id = (int)State.Overdue, Description = "Overdue"},
+                    new Status{Id = (int)State.Completed, Description = "Completed"},
+                };
+        }
+
         private static Models.ToDo BuildToDo(int id, string task, DateTime duedate, DateTime? reminderDate, string priority, string category, State state)
         {
             return new Models.ToDo
@@ -55,8 +90,8 @@ namespace ToDo.Services.Repository
                     DueDate = duedate,
                     ReminderDate = reminderDate,
                     Priority = new Priority { Description = priority },
-                    Category = new Category { Description = category},
-                    State = state
+                    Category = new Category { Description = category },
+                    Status = new Status { Id = (int)state, Description = state.ToString()}
                 };
         }
 
