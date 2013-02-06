@@ -27,6 +27,7 @@ namespace ToDo.Xaml.ViewModels
         {
             _toDoClient.SchduledToDos((results) =>
                 {
+                    _toDoItems.Clear();
                     _rawToDoItemsList = new List<Models.ToDo>(results);
    
                     foreach (var toDo in _rawToDoItemsList)
@@ -75,7 +76,7 @@ namespace ToDo.Xaml.ViewModels
 
         private void EditToDo(Models.ToDo toDoToEdit)
         {
-            _modalDialogService.ShowDialog<MaintainToDoItemChildWindow>(new MaintainToDoItemViewModel(_metaClient, toDoToEdit), result =>
+            _modalDialogService.ShowDialog<ToDoMaintenanceChildWindow>(new ToDoMaintenanceViewModel(_metaClient, toDoToEdit), result =>
                 {
                     if (result.HasValue && result.Value)
                     {

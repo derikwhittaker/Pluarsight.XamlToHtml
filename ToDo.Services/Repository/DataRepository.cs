@@ -18,9 +18,36 @@ namespace ToDo.Services.Repository
     public class DataRepository : IDataRepository
     {
         private static IList<Models.ToDo> _inMemeoryToDo = new List<Models.ToDo>();
+        private static IList<Priority> _priorities = new List<Priority>();
+        private static IList<Category> _categories = new List<Category>();
+        private static IList<Status> _statuses = new List<Status>(); 
 
         static DataRepository()
         {
+
+            _priorities = new List<Priority>
+                {
+                    new Priority {Id = 1, Description = "Normal"},
+                    new Priority {Id = 2, Description = "Medium"},
+                    new Priority {Id = 3, Description = "High"},
+                    new Priority {Id = 4, Description = "Critical"},
+                };
+
+            _categories = new List<Category>
+                {
+                    new Category{Id = 1, Description = "Honey Do"},
+                    new Category{Id = 2, Description = "Quality"},
+                    new Category{Id = 3, Description = "Personal"},
+                    new Category{Id = 4, Description = "Punishment"},
+                };
+
+            _statuses = new List<Status>
+                {
+                    new Status{Id = (int)State.Active, Description = "Active"},
+                    new Status{Id = (int)State.Overdue, Description = "Overdue"},
+                    new Status{Id = (int)State.Completed, Description = "Completed"},
+                };
+
             _inMemeoryToDo.Add(BuildToDo(1, "Pickup the dry cleaning", DateTime.Now.AddDays(-1), DateTime.Now.AddDays(-2), "Normal", "Honey Do", State.Overdue));
             _inMemeoryToDo.Add(BuildToDo(2, "Date Night", DateTime.Now.AddDays(5), DateTime.Now.AddDays(4), "High", "Quality", State.Active));
             _inMemeoryToDo.Add(BuildToDo(3, "Call the cabel company", DateTime.Now.AddDays(1), DateTime.Now.AddDays(0), "Normal", "Honey Do", State.Active));
@@ -31,7 +58,7 @@ namespace ToDo.Services.Repository
             _inMemeoryToDo.Add(BuildToDo(8, "Clean the grill", DateTime.Now.AddDays(5), DateTime.Now.AddDays(4), "Low", "Personal", State.Active));
             _inMemeoryToDo.Add(BuildToDo(9, "Pick paint color for the walls", DateTime.Now.AddDays(-4), DateTime.Now.AddDays(-3), "Normal", "Honey Do", State.Completed));
             _inMemeoryToDo.Add(BuildToDo(10, "Fix issues w/ the computer", DateTime.Now.AddDays(-3), DateTime.Now.AddDays(-4), "High", "Personal", State.Overdue));
-      
+
         }
 
         public IList<Models.ToDo> ActiveItems()
@@ -51,47 +78,34 @@ namespace ToDo.Services.Repository
 
         public IEnumerable<Priority> Properties()
         {
-            return new List<Priority>
-                {
-                    new Priority{Id = 1, Description = "Normal"},
-                    new Priority{Id = 2, Description = "Medium"},
-                    new Priority{Id = 3, Description = "High"},
-                    new Priority{Id = 4, Description = "Critical"},
-                };
+            return _priorities;
         }
 
         public IEnumerable<Category> Categories()
         {
-            return new List<Category>
-                {
-                    new Category{Id = 1, Description = "Honey Do"},
-                    new Category{Id = 2, Description = "Quality"},
-                    new Category{Id = 3, Description = "Personal"},
-                    new Category{Id = 4, Description = "Punishment"},
-                };
+            return _categories;
         }
 
         public IEnumerable<Status> Statuses()
         {
-            return new List<Status>
-                {
-                    new Status{Id = (int)State.Active, Description = "Active"},
-                    new Status{Id = (int)State.Overdue, Description = "Overdue"},
-                    new Status{Id = (int)State.Completed, Description = "Completed"},
-                };
+            return _statuses;
         }
 
         private static Models.ToDo BuildToDo(int id, string task, DateTime duedate, DateTime? reminderDate, string priority, string category, State state)
         {
+            var priorityInstance = _priorities.FirstOrDefault(x => x.Description == priority);
+            var categoryInstance = _categories.FirstOrDefault(x => x.Description == category);
+            var statusInstance = _statuses.FirstOrDefault(x => x.Id == (int) state);
+
             return new Models.ToDo
                 {
                     Id = id,
                     Task = task,
                     DueDate = duedate,
                     ReminderDate = reminderDate,
-                    Priority = new Priority { Description = priority },
-                    Category = new Category { Description = category },
-                    Status = new Status { Id = (int)state, Description = state.ToString()}
+                    Priority = priorityInstance,
+                    Category = categoryInstance,
+                    Status = statusInstance
                 };
         }
 

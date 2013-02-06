@@ -4,9 +4,9 @@ using ToDo.Xaml.Impl;
 
 namespace ToDo.Xaml.Views
 {
-    public partial class MaintainToDoItemChildWindow : ChildWindow, IModalWindow
+    public partial class ToDoMaintenanceChildWindow : ChildWindow, IModalWindow
     {
-        public MaintainToDoItemChildWindow()
+        public ToDoMaintenanceChildWindow()
         {
             InitializeComponent();
         }
