@@ -18,14 +18,8 @@ namespace ToDo.Services.Controllers
             return _dataRepository.ActiveItems();
         }
 
-        // GET api/values/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/values
-        public void Post([FromBody]string value)
+        public void Update(Models.ToDo toDo)
         {
         }
 

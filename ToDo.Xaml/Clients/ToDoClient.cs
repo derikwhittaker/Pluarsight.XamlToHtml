@@ -12,6 +12,7 @@ namespace ToDo.Xaml.Clients
     {
         void SchduledToDos( Action<IList<Models.ToDo>> results );
         void DeleteToDo(int idToDelete, Action<bool> callbackAction);
+        void UpdateToDo(Models.ToDo toDo, Action<bool> callbackAction);
     }
 
     public class ToDoClient : IToDoClient
@@ -52,6 +53,25 @@ namespace ToDo.Xaml.Clients
                         callbackAction.Invoke(false);
                     }
                 });
+        }
+
+        public void UpdateToDo(Models.ToDo toDo, Action<bool> callbackAction)
+        {
+            var client = new RestClient("http://localhost:33884/api/ToDo/Update");
+            var request = new RestRequest();
+            request.AddObject(toDo);
+
+            client.ExecuteAsync(request, (response, handle) =>
+            {
+                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent)
+                {
+                    DispatcherHelper.CheckBeginInvokeOnUI(() => callbackAction.Invoke(true));
+                }
+                else
+                {
+                    callbackAction.Invoke(false);
+                }
+            });
         }
 
     }

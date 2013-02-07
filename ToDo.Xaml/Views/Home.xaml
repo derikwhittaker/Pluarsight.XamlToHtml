@@ -6,11 +6,18 @@
                  xmlns:assets="clr-namespace:ToDo.Xaml.Assets"
                  xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                  xmlns:b="clr-namespace:ToDo.Xaml.Behaviors"
-                 mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
+                 mc:Ignorable="d" MinWidth="700" MinHeight="450"
     Title="Home"
     Style="{StaticResource PageStyle}">
+    
+    <navigation:Page.Resources>
+        <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+    </navigation:Page.Resources>
 
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Margin="5">
         <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
             <Grid Margin="0,10,0,0">
                 <Grid.RowDefinitions>
@@ -18,25 +25,38 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
-                    <assets:WatermarkedTextBox Width="150" Margin="5" Watermark="Filter ToDo's" 
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Content="Add New" Width="75" Margin="5,5,0,5" Command="{Binding AddToDoCommand}" HorizontalAlignment="Left" />
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                        <assets:WatermarkedTextBox Width="150" Margin="5" Watermark="Filter ToDo's" 
                                                Text="{Binding FilterText, Mode=TwoWay}" Style="{StaticResource WatermarkedTextBoxStyle}">
-                        <i:Interaction.Behaviors>
-                            <b:TextBoxUpdateOnChangeBehavior />
-                        </i:Interaction.Behaviors>
-                    </assets:WatermarkedTextBox>
-                    <Button Content="Filter" Width="75" Margin="5,5,0,5" Command="{Binding FilterToDoCommand}" />
-                </StackPanel>
-                
-                <ListBox Grid.Row="1" Margin="0,0,0,25" ItemsSource="{Binding ToDoItems}">
-                    <ListBox.ItemTemplate>
+                            <i:Interaction.Behaviors>
+                                <b:TextBoxUpdateOnChangeBehavior />
+                            </i:Interaction.Behaviors>
+                        </assets:WatermarkedTextBox>
+                        <Button Content="Filter" Width="75" Margin="5,5,0,5" Command="{Binding FilterToDoCommand}" />
+                    </StackPanel>
+                </Grid>
+
+
+                <ListBox Grid.Row="1" Margin="0,0,0,25" ItemsSource="{Binding ToDoItems}" 
+                         HorizontalContentAlignment="Stretch"
+                         ItemContainerStyle="{StaticResource ListBoxItemStyle}"  >
+                   
+                    <ListBox.ItemTemplate>                        
                         <DataTemplate>
-                            <Grid Height="20" Margin="5,0">
+                            <Grid Height="20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="25" />
-                                    <ColumnDefinition Width="300" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="75" />
+                                    <ColumnDefinition Width="75" />
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="50" />

@@ -129,8 +129,10 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\StateToEllipseConverter.cs" />
     <Compile Include="Impl\ModalDialogService.cs" />
+    <Compile Include="ViewModels\BaseValidationViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\ToDoMaintenanceViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelValidator.cs" />
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>

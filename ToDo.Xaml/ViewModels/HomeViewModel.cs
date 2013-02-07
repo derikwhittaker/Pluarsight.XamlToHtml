@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Threading;
 using GalaSoft.MvvmLight.Command;
 using ToDo.Xaml.Clients;
 using ToDo.Xaml.Impl;
@@ -22,6 +20,7 @@ namespace ToDo.Xaml.ViewModels
         private RelayCommand _filterToDoCommand;
         private RelayCommand<Models.ToDo> _editToDoCommand;
         private RelayCommand<Models.ToDo> _deleteToDoCommand;
+        private RelayCommand _addToDoCommand;
 
         private void RefreshToDoItems()
         {
@@ -67,6 +66,22 @@ namespace ToDo.Xaml.ViewModels
                     FilterToDo();
                 }
             }
+        }
+
+        public RelayCommand AddToDoCommand
+        {
+            get { return _addToDoCommand ?? (_addToDoCommand = new RelayCommand(AddToDo)); }
+        }
+
+        private void AddToDo()
+        {
+            _modalDialogService.ShowDialog<ToDoMaintenanceChildWindow>(new ToDoMaintenanceViewModel(_metaClient, new Models.ToDo()), result =>
+            {
+                if (result.HasValue && result.Value)
+                {
+                    RefreshToDoItems();
+                }
+            });
         }
 
         public RelayCommand<Models.ToDo> EditToDoCommand

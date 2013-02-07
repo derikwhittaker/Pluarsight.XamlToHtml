@@ -7,7 +7,7 @@ using ToDo.Xaml.Clients;
 
 namespace ToDo.Xaml.ViewModels
 {
-    public class ToDoMaintenanceViewModel : GalaSoft.MvvmLight.ViewModelBase
+    public class ToDoMaintenanceViewModel : BaseValidationViewModel
     {
         private readonly IMetaClient _metaClient;
         private readonly Models.ToDo _toDo;
@@ -34,24 +34,52 @@ namespace ToDo.Xaml.ViewModels
             _metaClient.Categories((results) =>
                 {
                     Categories = new ObservableCollection<Category>(results);
-                    SelectedCategory = results.FirstOrDefault(x => x.Id == _toDo.Category.Id);
+                    if (_toDo.Category != null)
+                    {
+                        SelectedCategory = results.FirstOrDefault(x => x.Id == _toDo.Category.Id);
+                    }
                 });
 
             _metaClient.Priorities((results) =>
                 {
                     Priorities = new ObservableCollection<Priority>(results);
-                    SelectedPriority = results.FirstOrDefault(x => x.Id == _toDo.Priority.Id);
+                    if (_toDo.Priority != null)
+                    {
+                        SelectedPriority = results.FirstOrDefault(x => x.Id == _toDo.Priority.Id);
+                    }
                 });
 
             _metaClient.Statuses((results) =>
             {
                 Statuses = new ObservableCollection<Status>(results);
-                SelectedStatus = results.FirstOrDefault(x => x.Id == _toDo.Status.Id);
+                if (_toDo.Status != null)
+                {
+                    SelectedStatus = results.FirstOrDefault(x => x.Id == _toDo.Status.Id);    
+                }
+                
             });
 
             Task = _toDo.Task;
             DueDate = _toDo.DueDate;
             ReminderDate = _toDo.ReminderDate;
+        }
+
+        protected override void SetupValidation()
+        {
+            AddValidationFunction(() => Task, () => !string.IsNullOrEmpty(Task) ? null : "Task is required");
+            AddValidationFunction(() => DueDate, () =>
+                {
+                    if ( DueDate == DateTime.MinValue)
+                    {
+                        return "Due Date is Required";
+                    }
+
+                    return null;
+                });
+
+            AddValidationFunction(() => SelectedCategory, () => SelectedCategory != null ? null : "Category is required");
+            AddValidationFunction(() => SelectedPriority, () => SelectedPriority != null ? null : "Priority is required");
+            AddValidationFunction(() => SelectedStatus, () => SelectedStatus != null ? null : "Status is required");
         }
 
         public RelayCommand SaveCommand
