@@ -287,8 +287,8 @@
         </Grid>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-            <Button x:Name="CancelButton" Content="Cancel" Click="CancelButton_Click" Width="75" Height="23" Margin="5"/>
-            <Button x:Name="OKButton" Content="OK" Click="OKButton_Click" Width="75" Height="23" Margin="5"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}" Width="75" Height="23" Margin="5"/>
+            <Button Content="OK" Command="{Binding SaveCommand}" Width="75" Height="23" Margin="5"/>
         </StackPanel>
         
     </Grid>

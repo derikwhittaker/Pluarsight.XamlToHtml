@@ -58,8 +58,9 @@ namespace ToDo.Xaml.Clients
         public void UpdateToDo(Models.ToDo toDo, Action<bool> callbackAction)
         {
             var client = new RestClient("http://localhost:33884/api/ToDo/Update");
-            var request = new RestRequest();
+            var request = new RestRequest(Method.POST);
             request.AddObject(toDo);
+            
 
             client.ExecuteAsync(request, (response, handle) =>
             {

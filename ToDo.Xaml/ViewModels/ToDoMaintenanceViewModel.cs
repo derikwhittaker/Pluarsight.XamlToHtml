@@ -2,13 +2,16 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ToDo.Models;
 using ToDo.Xaml.Clients;
+using ToDo.Xaml.Impl.Messages;
 
 namespace ToDo.Xaml.ViewModels
 {
     public class ToDoMaintenanceViewModel : BaseValidationViewModel
     {
+        private readonly IToDoClient _toDoClient;
         private readonly IMetaClient _metaClient;
         private readonly Models.ToDo _toDo;
         private ObservableCollection<Priority> _priorities;
@@ -21,9 +24,11 @@ namespace ToDo.Xaml.ViewModels
         private Category _selectedCategory;
         private Priority _selectedPriority;
         private Status _selectedStatus;
+        private RelayCommand _cancelCommand;
 
-        public ToDoMaintenanceViewModel( IMetaClient metaClient, Models.ToDo toDo)
+        public ToDoMaintenanceViewModel( IToDoClient toDoClient, IMetaClient metaClient, Models.ToDo toDo)
         {
+            _toDoClient = toDoClient;
             _metaClient = metaClient;
             _toDo = toDo;
             Initialize();
@@ -82,6 +87,14 @@ namespace ToDo.Xaml.ViewModels
             AddValidationFunction(() => SelectedStatus, () => SelectedStatus != null ? null : "Status is required");
         }
 
+        public RelayCommand CancelCommand
+        {
+            get
+            {
+                return _cancelCommand ?? (_cancelCommand = new RelayCommand(() => Messenger.Default.Send(new CloseDialogMessage {Success = false})));
+            }
+        }
+
         public RelayCommand SaveCommand
         {
             get { return _saveCommand ?? (_saveCommand = new RelayCommand(Save, CanSave)) ; }
@@ -94,7 +107,14 @@ namespace ToDo.Xaml.ViewModels
 
         private void Save()
         {
-            
+            _toDo.Task = Task;
+            _toDo.DueDate = DueDate;
+            _toDo.ReminderDate = ReminderDate;
+            _toDo.Category = SelectedCategory;
+            _toDo.Priority = SelectedPriority;
+            _toDo.Status = SelectedStatus;
+
+            _toDoClient.UpdateToDo(_toDo, (result) => Messenger.Default.Send(new CloseDialogMessage{Success = result}));
         }
 
         public ObservableCollection<Category> Categories

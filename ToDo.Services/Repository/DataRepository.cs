@@ -13,6 +13,7 @@ namespace ToDo.Services.Repository
         IEnumerable<Priority> Properties();
         IEnumerable<Category> Categories();
         IEnumerable<Status> Statuses();
+        void Update(Models.ToDo toDo);
     }
 
     public class DataRepository : IDataRepository
@@ -89,6 +90,25 @@ namespace ToDo.Services.Repository
         public IEnumerable<Status> Statuses()
         {
             return _statuses;
+        }
+
+        public void Update(Models.ToDo toDo)
+        {
+            if (toDo.Id == 0)
+            {
+                toDo.Id = _inMemeoryToDo.Count() + 1;
+                _inMemeoryToDo.Add(toDo);
+            }
+            else
+            {
+                var foundItem = _inMemeoryToDo.FirstOrDefault(x => x.Id == toDo.Id);
+
+                if (foundItem != null )
+                {
+                    _inMemeoryToDo.Remove(foundItem);
+                    _inMemeoryToDo.Add(toDo);
+                }
+            }
         }
 
         private static Models.ToDo BuildToDo(int id, string task, DateTime duedate, DateTime? reminderDate, string priority, string category, State state)

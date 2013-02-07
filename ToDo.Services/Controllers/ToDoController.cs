@@ -21,6 +21,7 @@ namespace ToDo.Services.Controllers
         // POST api/values
         public void Update(Models.ToDo toDo)
         {
+            _dataRepository.Update(toDo);
         }
 
 

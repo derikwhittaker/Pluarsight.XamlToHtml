@@ -1,6 +1,7 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using GalaSoft.MvvmLight.Messaging;
 using ToDo.Xaml.Impl;
+using ToDo.Xaml.Impl.Messages;
 
 namespace ToDo.Xaml.Views
 {
@@ -9,17 +10,15 @@ namespace ToDo.Xaml.Views
         public ToDoMaintenanceChildWindow()
         {
             InitializeComponent();
+
+            Messenger.Default.Register<CloseDialogMessage>(this, CloseDialogHandler);
         }
 
-        private void OKButton_Click(object sender, RoutedEventArgs e)
+        private void CloseDialogHandler(CloseDialogMessage closeDialogMessage)
         {
-            this.DialogResult = true;
+            this.DialogResult = closeDialogMessage.Success;
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-        }
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
@@ -75,7 +76,7 @@ namespace ToDo.Xaml.ViewModels
 
         private void AddToDo()
         {
-            _modalDialogService.ShowDialog<ToDoMaintenanceChildWindow>(new ToDoMaintenanceViewModel(_metaClient, new Models.ToDo()), result =>
+            _modalDialogService.ShowDialog<ToDoMaintenanceChildWindow>(new ToDoMaintenanceViewModel(_toDoClient, _metaClient, new Models.ToDo{DueDate = DateTime.Now}), result =>
             {
                 if (result.HasValue && result.Value)
                 {
@@ -91,7 +92,7 @@ namespace ToDo.Xaml.ViewModels
 
         private void EditToDo(Models.ToDo toDoToEdit)
         {
-            _modalDialogService.ShowDialog<ToDoMaintenanceChildWindow>(new ToDoMaintenanceViewModel(_metaClient, toDoToEdit), result =>
+            _modalDialogService.ShowDialog<ToDoMaintenanceChildWindow>(new ToDoMaintenanceViewModel(_toDoClient, _metaClient, toDoToEdit), result =>
                 {
                     if (result.HasValue && result.Value)
                     {

@@ -128,6 +128,7 @@
     <Compile Include="Clients\ToDoClient.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\StateToEllipseConverter.cs" />
+    <Compile Include="Impl\Messages\CloseDialogMessage.cs" />
     <Compile Include="Impl\ModalDialogService.cs" />
     <Compile Include="ViewModels\BaseValidationViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
