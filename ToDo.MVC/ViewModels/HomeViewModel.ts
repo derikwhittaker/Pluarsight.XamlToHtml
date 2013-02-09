@@ -10,30 +10,16 @@ module ToDo {
 
         constructor() {
 
-            this.ToDos.push({
-                Id: 1, Task: "Fix Issues w/ the Computer",
-                DueDate: moment().subtract('days', 2).format("MM/DD/YYYY"), ReminderDate: moment().subtract('days', 1).format("MM/DD/YYYY"),
-                Priority: "High", Category: "Personal", Status: "Overdue"
-            });
-
-            this.ToDos.push({
-                Id: 2, Task: "Call Cable company",
-                DueDate: moment().format("MM/DD/YYYY"), ReminderDate: moment().format("MM/DD/YYYY"),
-                Priority: "High", Category: "Honey Do", Status: "Active"
-            });
-
-            this.ToDos.push({
-                Id: 3, Task: "Order items from Amazon",
-                DueDate: moment().add('days', 2).format("MM/DD/YYYY"), ReminderDate: moment().add('days', 1).format("MM/DD/YYYY"),
-                Priority: "High", Category: "Personal", Status: "Active"
-            });
+            this.fetchRemoteToDoList();
 
             this.OverdueCount = ko.computed(() => {
-                return _.where(this.ToDos(), {Status: "Overdue"}).length;
+                var count = _.filter(this.ToDos(), (item) => { return item.Status() == "Overdue" }).length;
+                return count;
             });
 
             this.ActiveCount = ko.computed(() => {
-                return _.where(this.ToDos(), { Status: "Active" }).length;
+                var count = _.filter(this.ToDos(), (item) => { return item.Status() == "Active" }).length;
+                return count;
             });
 
             this.TotalCount = ko.computed(() => {
@@ -46,22 +32,35 @@ module ToDo {
 
         filterList() {
         }
+
+        fetchRemoteToDoList() {
+            this.ToDos.push(new ToDoViewModel( {
+                Id: 1, Task: "Fix Issues w/ the Computer",
+                DueDate: moment().subtract('days', 2).format("MM/DD/YYYY"), ReminderDate: moment().subtract('days', 1).format("MM/DD/YYYY"),
+                Priority: "High", Category: "Personal", Status: "Overdue"
+            }));
+
+            this.ToDos.push(new ToDoViewModel({
+                Id: 2, Task: "Call Cable company",
+                DueDate: moment().format("MM/DD/YYYY"), ReminderDate: moment().format("MM/DD/YYYY"),
+                Priority: "High", Category: "Honey Do", Status: "Active"
+            }));
+
+            this.ToDos.push(new ToDoViewModel({
+                Id: 3, Task: "Order items from Amazon",
+                DueDate: moment().add('days', 2).format("MM/DD/YYYY"), ReminderDate: moment().add('days', 1).format("MM/DD/YYYY"),
+                Priority: "High", Category: "Personal", Status: "Active"
+            }));
+
+            this.ToDos.push(new ToDoViewModel({
+                Id: 4, Task: "Order items from Amazon",
+                DueDate: moment().add('days', 4).format("MM/DD/YYYY"), ReminderDate: moment().add('days', 3).format("MM/DD/YYYY"),
+                Priority: "High", Category: "Personal", Status: "Completed"
+            }));
+        }
     }
     
     export class ToDoViewModel {
-
-        constructor(seedDto: IToDoDto) {
-            if (seedDto != undefined) {
-                this.Id(seedDto.Id());
-                this.Task(seedDto.Task());
-                this.DueDate(seedDto.DueDate());
-                this.ReminderDate(seedDto.ReminderDate());
-                this.Priority(seedDto.Priority());
-                this.Category(seedDto.Category());
-                this.Status(seedDto.Status());
-            }            
-        }
-
         public Id: KnockoutObservableNumber = ko.observable(0);
         public Task: KnockoutObservableString = ko.observable("");
         public DueDate: KnockoutObservableDate = ko.observable();
@@ -69,16 +68,49 @@ module ToDo {
         public Priority: KnockoutObservableString = ko.observable("");
         public Category: KnockoutObservableString = ko.observable("");
         public Status: KnockoutObservableString = ko.observable("");
+        public StatusStyle: KnockoutComputed;
+        public IsCompleted: KnockoutComputed;
+
+        constructor(seedDto: any) {
+            if (seedDto != undefined) {
+                this.Id(seedDto.Id);
+                this.Task(seedDto.Task);
+                this.DueDate(seedDto.DueDate);
+                this.ReminderDate(seedDto.ReminderDate);
+                this.Priority(seedDto.Priority);
+                this.Category(seedDto.Category);
+                this.Status(seedDto.Status);
+            }
+
+            this.StatusStyle = ko.computed(() => {
+                switch (this.Status()) {
+                    case "Active":
+                        return "circle status-active-color";
+                        break;
+                    case "Overdue":
+                        return "circle status-overdue-color";
+                        break;
+                    case "Completed":
+                        return "circle status-completed-color";
+                        break;
+                }
+            });
+
+            this.IsCompleted = ko.computed(() => {
+                var isCompleted = this.Status() == "Completed";
+                return isCompleted;
+            });
+        }
     }
 
-    export interface IToDoDto {
+    //export interface IToDoDto {
 
-        Id: KnockoutObservableNumber;
-        Task: KnockoutObservableString;
-        DueDate: KnockoutObservableDate;
-        ReminderDate: KnockoutObservableDate;
-        Priority: KnockoutObservableString;
-        Category: KnockoutObservableString;
-        Status: KnockoutObservableString;
-    }
+    //    Id: KnockoutObservableNumber;
+    //    Task: KnockoutObservableString;
+    //    DueDate: KnockoutObservableDate;
+    //    ReminderDate: KnockoutObservableDate;
+    //    Priority: KnockoutObservableString;
+    //    Category: KnockoutObservableString;
+    //    Status: KnockoutObservableString;
+    //}
 }
