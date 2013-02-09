@@ -67,3 +67,30 @@ textarea {
     margin-right: auto;
     width: 940px;
 }
+
+input[type="text"] {
+    margin-bottom: 0px;
+}
+
+
+/* Custom styles */
+.table-chromeless tr td {
+  border-top: 0px;
+}
+.table-chromeless tbody tr:hover td,
+.table-chromeless tbody tr:hover th {
+  background-color: transparent;
+}
+
+.table-footerstats td {
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: center;
+}
+
+.total-label-text {
+  color: #d0d0d0;
+}
+.total-value-text {
+  color: #c8d101;
+}

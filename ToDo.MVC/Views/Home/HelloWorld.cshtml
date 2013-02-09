@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "HelloWorld";
+}
+
+<h2 data-bind="text: Message"></h2>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var vm = new ToDo.HelloworldViewModel();
+
+        ko.applyBindings(vm);
+    </script>
+
+}

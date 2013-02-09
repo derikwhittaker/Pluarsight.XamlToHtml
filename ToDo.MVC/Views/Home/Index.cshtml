@@ -2,4 +2,52 @@
     ViewBag.Title = "Home";
 }
 
-<h2>Home</h2>
+@section scripts
+{
+    <script type="text/javascript">
+        (function() {
+            var vm = new ToDo.HomeViewModel();
+            ko.applyBindings(vm);
+        } )();
+    </script>
+}
+
+<div id="filterBar" class="container" style="margin-bottom: 10px; padding-top: 15px;">
+    <div style="float: left"><input type="button" class="btn btn-primary" value="Add ToDo" style="width: 100px;" /></div>
+    <div style="float: right; margin-right: 18px;">
+        <input type="text" placeholder="Filter ToDo's" />
+        <input type="button" class="btn btn-primary" value="Edit" style="width: 65px;" />
+    </div>
+</div>
+<div id="todoItems" class="container">
+    <table class="table table-hover">
+        <tbody data-bind="foreach: ToDos">
+            <tr>
+                <td style="width: 25px;"></td>
+                <td style="width: 300px;"><span data-bind="text: Task" ></span></td>
+                <td style="width: 75px;"><span data-bind="text: DueDate"></span></td>
+                <td style="width: 75px;"><span data-bind="text: ReminderDate"></span></td>
+                <td style="width: 75px;"><span data-bind="text: Priority"></span></td>
+                <td style="width: 75px;"><span data-bind="text: Category"></span></td>
+                <td style="width: 75px;"><span data-bind="text: Status"></span></td>
+                <td style="width: 75px;"><input type="button" class="btn" value="Edit" style="width: 65px;" /></td>
+                <td style="width: 75px;"><input type="button" class="btn" value="Delete" style="width: 65px;"/></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="9">
+                    <div class="pull-right">
+                        <table class="table table-chromeless table-footerstats">
+                            <tbody>
+                                <td><span class="total-label-text">Overdue</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: OverdueCount" /></td>
+                                <td><span class="total-label-text">Active</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: ActiveCount" /></td>
+                                <td><span class="total-label-text">Total</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: TotalCount" /></td>                         
+                            </tbody>
+                        </table>               
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

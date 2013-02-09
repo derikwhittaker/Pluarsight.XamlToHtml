@@ -16,5 +16,10 @@ namespace ToDo.MVC.Controllers
             return View();
         }
 
+        public ActionResult HelloWorld()
+        {
+            return View();
+        }
+
     }
 }

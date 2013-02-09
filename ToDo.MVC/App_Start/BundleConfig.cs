@@ -1,5 +1,5 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
+using BundleTransformer.Core.Transformers;
 
 namespace ToDo.MVC
 {
@@ -21,7 +21,8 @@ namespace ToDo.MVC
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/knockout-{version}.js",
-                        "~/Scripts/underscore.js"));
+                        "~/Scripts/underscore.js",
+                        "~/Scripts/moment.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
@@ -33,6 +34,9 @@ namespace ToDo.MVC
                 "~/Content/site.css"
                 ));
 
+            var typeScriptBundle = new ScriptBundle("~/bundles/ts").IncludeDirectory("~/ViewModels", "*.ts", true);
+            typeScriptBundle.Transforms.Add(new JsTransformer());
+            bundles.Add(typeScriptBundle);
 
         }
     }
