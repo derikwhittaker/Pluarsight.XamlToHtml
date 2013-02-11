@@ -141,6 +141,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\Attributes\AllowCrossSiteJsonAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetaController.cs" />
     <Compile Include="Controllers\ToDoController.cs" />
@@ -282,7 +283,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53413</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:33884/</IISUrl>
+          <IISUrl>http://localhost:8888/ToDoServices</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

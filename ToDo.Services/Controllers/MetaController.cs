@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using ToDo.Services.Controllers.Attributes;
 using ToDo.Services.Repository;
 
 namespace ToDo.Services.Controllers
 {
+     [AllowCrossSiteJson]
     public class MetaController : ApiController
     {
         private readonly IDataRepository _dataRepository;

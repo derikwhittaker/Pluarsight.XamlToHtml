@@ -9,6 +9,7 @@ namespace ToDo.Services.Repository
     public interface IDataRepository
     {
         IList<Models.ToDo> ActiveItems();
+        IList<Models.ToDo> AllItems();
         void Delete(int id);
         IEnumerable<Priority> Properties();
         IEnumerable<Category> Categories();
@@ -56,7 +57,7 @@ namespace ToDo.Services.Repository
             _inMemeoryToDo.Add(BuildToDo(5, "Order items off Amazon", DateTime.Now.AddDays(3), null, "Normal", "Personal", State.Active));
             _inMemeoryToDo.Add(BuildToDo(6, "Get the car washed", DateTime.Now.AddDays(3), null, "Normal", "Personal", State.Active));
             _inMemeoryToDo.Add(BuildToDo(7, "Fix the issues w/ the door", DateTime.Now.AddDays(5), DateTime.Now.AddDays(4), "Normal", "Honey Do", State.Active));
-            _inMemeoryToDo.Add(BuildToDo(8, "Clean the grill", DateTime.Now.AddDays(5), DateTime.Now.AddDays(4), "Low", "Personal", State.Active));
+            _inMemeoryToDo.Add(BuildToDo(8, "Clean the grill", DateTime.Now.AddDays(5), DateTime.Now.AddDays(4), "Normal", "Personal", State.Active));
             _inMemeoryToDo.Add(BuildToDo(9, "Pick paint color for the walls", DateTime.Now.AddDays(-4), DateTime.Now.AddDays(-3), "Normal", "Honey Do", State.Completed));
             _inMemeoryToDo.Add(BuildToDo(10, "Fix issues w/ the computer", DateTime.Now.AddDays(-3), DateTime.Now.AddDays(-4), "High", "Personal", State.Overdue));
 
@@ -65,6 +66,11 @@ namespace ToDo.Services.Repository
         public IList<Models.ToDo> ActiveItems()
         {
             return _inMemeoryToDo.Where(x => x.Status.Id != (int)State.Completed).OrderBy(x => x.DueDate).ToList();
+        }
+
+        public IList<Models.ToDo> AllItems()
+        {
+            return _inMemeoryToDo.OrderBy(x => x.Status.Id).ThenBy(x => x.DueDate).ToList();
         }
 
         public void Delete(int id)

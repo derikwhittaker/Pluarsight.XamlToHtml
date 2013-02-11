@@ -1,52 +1,103 @@
 ﻿@{
     ViewBag.Title = "Home";
 }
+<div id="todo-listing" class="container">
+    <div id="filterBar" class="container" style="margin-bottom: 10px; padding-top: 15px;">
+        <div style="float: left"><input type="button" class="btn btn-primary" value="Add ToDo" style="width: 100px;" data-bind="click: addNewToDo" /></div>
+        <div style="float: right; margin-right: 18px;">
+            <input type="text" placeholder="Filter ToDo's" data-bind="value: FilterText, valueUpdate: 'afterKeyDown'" />
+            <input type="button" class="btn btn-primary" value="Filter" style="width: 65px;" data-bind="click: filterList" />
+        </div>
+    </div>
+    <div id="todoItems" class="container">
+        <table class="table table-hover">
+            <tbody data-bind="foreach: ToDos">
+                <tr>
+                    <td style="width: 15px; vertical-align: middle; padding-right: 0px;"><div data-bind="attr: {class: StatusStyle}" /></td>
+                    <td style="width: 300px;"><span data-bind="text: Task, css: { strikethrough: IsCompleted }" ></span></td>
+                    <td style="width: 75px;"><span data-bind="text: DueDate, css: { strikethrough: IsCompleted }"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: ReminderDate, css: { strikethrough: IsCompleted }"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: Priority, css: { strikethrough: IsCompleted }"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: Category, css: { strikethrough: IsCompleted }"></span></td>
+                    <td style="width: 75px;"><input type="button" class="btn" value="Edit" style="width: 65px;"  data-bind="visible: Status() != 'Completed'" /></td>
+                    <td style="width: 75px;"><input type="button" class="btn" value="Delete" style="width: 65px;" data-bind="visible: Status() != 'Completed', click: function(data, event){ $parent.deleteToDo( Id(), data, event)}" /></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="9">
+                        <div class="pull-right">
+                            <table class="table table-chromeless table-footerstats">
+                                <tbody>
+                                    <td><span class="total-label-text">Overdue</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: OverdueCount" /></td>
+                                    <td><span class="total-label-text">Active</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: ActiveCount" /></td>
+                                    <td><span class="total-label-text">Total</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: TotalCount" /></td>                         
+                                </tbody>
+                            </table>               
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+@*Dialogs*@
+<div id="todo-edit-modal" class="modal hide fade" role="dialog">
+    <div class="modal-header pull-left">
+        <h3>Maintain To Do Item</h3>
+    </div>
+    <div class="modal-body pull-left" style="overflow: auto">
+        <form>
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width: 150px">Task</td>
+                        <td><input type="text" data-bind="value: Task, valueUpdate: 'afterkeydown'"/></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Due Date</td>
+                        <td><input type="date" style="width: 140px;" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Reminder Date</td>
+                        <td><input type="date" style="width: 140px;" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Priority</td>
+                        <td><select style="width: 150px;" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Category</td>
+                        <td><select style="width: 150px;" data-bind="options: Categories, optionsText: 'Description', value: SelectedCategory, optionCaption: 'Choose a Category...'" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Status</td>
+                        <td><select style="width: 150px;" /></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <!-- ok putting the width of 94.5 is lame, need to fix this -->
+    <div class="modal-footer pull-right" style="width: 94.5%">
+        <button class="btn" style="width: 100px;" data-dismiss="modal">Cancel</button>
+        <button class="btn" style="width: 100px;">Save</button>
+    </div>
+</div>
+
 
 @section scripts
 {
     <script type="text/javascript">
         (function() {
             var vm = new ToDo.HomeViewModel();
-            ko.applyBindings(vm);
+            
+            // this is needed once we add the dialog
+            var todoListing = $('#todo-listing')[0];
+            ko.applyBindings(vm, todoListing);
+
         } )();
     </script>
 }
-
-<div id="filterBar" class="container" style="margin-bottom: 10px; padding-top: 15px;">
-    <div style="float: left"><input type="button" class="btn btn-primary" value="Add ToDo" style="width: 100px;" /></div>
-    <div style="float: right; margin-right: 18px;">
-        <input type="text" placeholder="Filter ToDo's" />
-        <input type="button" class="btn btn-primary" value="Edit" style="width: 65px;" />
-    </div>
-</div>
-<div id="todoItems" class="container">
-    <table class="table table-hover">
-        <tbody data-bind="foreach: ToDos">
-            <tr>
-                <td style="width: 15px; vertical-align: middle; padding-right: 0px;"><div data-bind="attr: {class: StatusStyle}" /></td>
-                <td style="width: 300px;"><span data-bind="text: Task, css: { strikethrough: IsCompleted }" ></span></td>
-                <td style="width: 75px;"><span data-bind="text: DueDate, css: { strikethrough: IsCompleted }"></span></td>
-                <td style="width: 75px;"><span data-bind="text: ReminderDate, css: { strikethrough: IsCompleted }"></span></td>
-                <td style="width: 75px;"><span data-bind="text: Priority, css: { strikethrough: IsCompleted }"></span></td>
-                <td style="width: 75px;"><span data-bind="text: Category, css: { strikethrough: IsCompleted }"></span></td>
-                <td style="width: 75px;"><input type="button" class="btn" value="Edit" style="width: 65px;"  data-bind="visible: Status() != 'Completed'" /></td>
-                <td style="width: 75px;"><input type="button" class="btn" value="Delete" style="width: 65px;" data-bind="visible: Status() != 'Completed'" /></td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="9">
-                    <div class="pull-right">
-                        <table class="table table-chromeless table-footerstats">
-                            <tbody>
-                                <td><span class="total-label-text">Overdue</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: OverdueCount" /></td>
-                                <td><span class="total-label-text">Active</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: ActiveCount" /></td>
-                                <td><span class="total-label-text">Total</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: TotalCount" /></td>                         
-                            </tbody>
-                        </table>               
-                    </div>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-</div>

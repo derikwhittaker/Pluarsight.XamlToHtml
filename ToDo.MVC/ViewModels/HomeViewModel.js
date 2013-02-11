@@ -4,6 +4,8 @@ var ToDo;
         function HomeViewModel() {
             var _this = this;
             this.ToDos = ko.observableArray();
+            this.OriginalToDos = ko.observableArray();
+            this.FilterText = ko.observable("");
             this.fetchRemoteToDoList();
             this.OverdueCount = ko.computed(function () {
                 var count = _.filter(_this.ToDos(), function (item) {
@@ -22,46 +24,66 @@ var ToDo;
             });
         }
         HomeViewModel.prototype.addNewToDo = function () {
+            var model = new ToDoViewModel(undefined);
+            model.Task("Hello");
+            var divName = '#todo-edit-modal';
+            $(divName).modal('show');
+            $(divName).on('shown', function () {
+                model.fetchData();
+                var modalDialog = $(divName)[0];
+                ko.applyBindings(model, modalDialog);
+            });
+            $(divName).on('hide', function () {
+                ko.cleanNode($(divName)[0]);
+                $(divName).off('shown hide');
+            });
+        };
+        HomeViewModel.prototype.deleteToDo = function (id) {
+            var self = this;
+            var url = "http://localhost:8888/ToDoServices/api/ToDo/Delete/" + id;
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (data) {
+                    self.OriginalToDos.removeAll();
+                    self.ToDos.removeAll();
+                    self.fetchRemoteToDoList();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                }
+            });
         };
         HomeViewModel.prototype.filterList = function () {
+            var self = this;
+            if(self.FilterText().length == 0) {
+                self.ToDos(self.OriginalToDos());
+            } else {
+                var results = _.filter(self.OriginalToDos(), function (item) {
+                    return item.Task().toLowerCase().indexOf(self.FilterText().toLowerCase()) >= 0;
+                });
+                self.ToDos(results);
+            }
         };
         HomeViewModel.prototype.fetchRemoteToDoList = function () {
-            this.ToDos.push(new ToDoViewModel({
-                Id: 1,
-                Task: "Fix Issues w/ the Computer",
-                DueDate: moment().subtract('days', 2).format("MM/DD/YYYY"),
-                ReminderDate: moment().subtract('days', 1).format("MM/DD/YYYY"),
-                Priority: "High",
-                Category: "Personal",
-                Status: "Overdue"
-            }));
-            this.ToDos.push(new ToDoViewModel({
-                Id: 2,
-                Task: "Call Cable company",
-                DueDate: moment().format("MM/DD/YYYY"),
-                ReminderDate: moment().format("MM/DD/YYYY"),
-                Priority: "High",
-                Category: "Honey Do",
-                Status: "Active"
-            }));
-            this.ToDos.push(new ToDoViewModel({
-                Id: 3,
-                Task: "Order items from Amazon",
-                DueDate: moment().add('days', 2).format("MM/DD/YYYY"),
-                ReminderDate: moment().add('days', 1).format("MM/DD/YYYY"),
-                Priority: "High",
-                Category: "Personal",
-                Status: "Active"
-            }));
-            this.ToDos.push(new ToDoViewModel({
-                Id: 4,
-                Task: "Order items from Amazon",
-                DueDate: moment().add('days', 4).format("MM/DD/YYYY"),
-                ReminderDate: moment().add('days', 3).format("MM/DD/YYYY"),
-                Priority: "High",
-                Category: "Personal",
-                Status: "Completed"
-            }));
+            var _this = this;
+            var self = this;
+            var url = "http://localhost:8888/ToDoServices/api/ToDo/";
+            $.ajax({
+                url: url,
+                type: 'Get',
+                success: function (data) {
+                    var temp = self.ToDos();
+                    _.each(data, function (item) {
+                        var toDoVM = new ToDoViewModel(item);
+                        toDoVM.Parent = _this;
+                        temp.push(toDoVM);
+                    });
+                    self.ToDos.valueHasMutated();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                }
+            });
+            this.OriginalToDos(this.ToDos());
         };
         return HomeViewModel;
     })();
@@ -69,6 +91,7 @@ var ToDo;
     var ToDoViewModel = (function () {
         function ToDoViewModel(seedDto) {
             var _this = this;
+            this.Parent = undefined;
             this.Id = ko.observable(0);
             this.Task = ko.observable("");
             this.DueDate = ko.observable();
@@ -76,14 +99,23 @@ var ToDo;
             this.Priority = ko.observable("");
             this.Category = ko.observable("");
             this.Status = ko.observable("");
+            this.Priorities = ko.observableArray();
+            this.SelectedPriority = ko.observable();
+            this.Categories = ko.observableArray();
+            this.SelectedCategory = ko.observable();
+            this.Statuses = ko.observableArray();
+            this.SelectedStatus = ko.observable();
+            this.remoteCallCounter = 0;
+            this.totalRemoteCallsExpected = 3;
             if(seedDto != undefined) {
+                var reminderDate = seedDto.ReminderDate ? moment(seedDto.ReminderDate).format("MM/DD/YYYY") : "";
                 this.Id(seedDto.Id);
                 this.Task(seedDto.Task);
-                this.DueDate(seedDto.DueDate);
-                this.ReminderDate(seedDto.ReminderDate);
-                this.Priority(seedDto.Priority);
-                this.Category(seedDto.Category);
-                this.Status(seedDto.Status);
+                this.DueDate(moment(seedDto.DueDate).format("MM/DD/YYYY"));
+                this.ReminderDate(reminderDate);
+                this.Priority(seedDto.Priority.Description);
+                this.Category(seedDto.Category.Description);
+                this.Status(seedDto.Status.Description);
             }
             this.StatusStyle = ko.computed(function () {
                 switch(_this.Status()) {
@@ -103,6 +135,48 @@ var ToDo;
                 return isCompleted;
             });
         }
+        ToDoViewModel.prototype.fetchData = function () {
+            this.remoteCallCounter = 0;
+            this.fetchCategories();
+            this.fetchPriorities();
+            this.fetchStatuses();
+        };
+        ToDoViewModel.prototype.fetchCategories = function () {
+            var self = this;
+            var url = "http://localhost:8888/ToDoServices/api/Meta/Categories";
+            $.ajax({
+                url: url,
+                type: 'Get',
+                success: function (data) {
+                    self.totalRemoteCallsExpected++;
+                    self.Categories(data);
+                }
+            });
+        };
+        ToDoViewModel.prototype.fetchPriorities = function () {
+            var self = this;
+            var url = "http://localhost:8888/ToDoServices/api/Meta/Priorities";
+            $.ajax({
+                url: url,
+                type: 'Get',
+                success: function (data) {
+                    self.totalRemoteCallsExpected++;
+                    self.Priorities(data);
+                }
+            });
+        };
+        ToDoViewModel.prototype.fetchStatuses = function () {
+            var self = this;
+            var url = "http://localhost:8888/ToDoServices/api/Meta/Statuses";
+            $.ajax({
+                url: url,
+                type: 'Get',
+                success: function (data) {
+                    self.totalRemoteCallsExpected++;
+                    self.Statuses(data);
+                }
+            });
+        };
         return ToDoViewModel;
     })();
     ToDo.ToDoViewModel = ToDoViewModel;    

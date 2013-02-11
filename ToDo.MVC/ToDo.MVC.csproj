@@ -232,10 +232,13 @@
     <Content Include="Scripts\d.ts\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="ViewModels\HomeViewModel.ts" />
     <TypeScriptCompile Include="Scripts\d.ts\references.ts" />
+    <Content Include="Scripts\d.ts\knockout\knockout.mapping-2.0.d.ts" />
     <Content Include="Scripts\d.ts\moment\moment.d.ts" />
     <Content Include="Scripts\d.ts\references.js">
       <DependentUpon>references.ts</DependentUpon>
     </Content>
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="ViewModels\HomeViewModel.js">
@@ -308,9 +311,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>43747</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3462/</IISUrl>
+          <IISUrl>http://localhost:8888/ToDoMVC</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
