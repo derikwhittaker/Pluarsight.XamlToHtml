@@ -31,21 +31,22 @@ module ToDo {
         }
 
         addNewToDo() {
+            var self = this;
             var model = new ToDoViewModel(undefined);
-            model.Task("Hello");
-           
+                      
             var divName = '#todo-edit-modal'
             $(divName).modal('show');
 
             $(divName).on('shown', () => {
                 model.fetchData();
+
                 var modalDialog = $(divName)[0];
                 ko.applyBindings(model, modalDialog);
             });
 
             $(divName).on('hide', () => {
-                //model.parent.fetchContacts();
 
+                self.fetchRemoteToDoList();
                 ko.cleanNode($(divName)[0]);
                 $(divName).off('shown hide')
             });
@@ -59,13 +60,36 @@ module ToDo {
                 url: url,
                 type: 'DELETE',
                 success: (data) => {
-                    self.OriginalToDos.removeAll();
-                    self.ToDos.removeAll();
                     self.fetchRemoteToDoList();
                 },
                 error: (XMLHttpRequest, textStatus, errorThrown) => {
 
                 }
+            });
+        }
+
+        editToDo(id: number) {
+            var self = this;
+
+            var model = _.find(self.OriginalToDos(), (item) => {
+                return item.Id() == id;
+            });
+
+            var divName = '#todo-edit-modal'
+            $(divName).modal('show');
+
+            $(divName).on('shown', () => {
+                model.fetchData();
+
+                var modalDialog = $(divName)[0];
+                ko.applyBindings(model, modalDialog);
+            });
+
+            $(divName).on('hide', () => {
+
+                self.fetchRemoteToDoList();
+                ko.cleanNode($(divName)[0]);
+                $(divName).off('shown hide')
             });
         }
 
@@ -87,6 +111,8 @@ module ToDo {
         fetchRemoteToDoList() {
             var self = this;
             var url = "http://localhost:8888/ToDoServices/api/ToDo/";
+            self.OriginalToDos.removeAll();
+            self.ToDos.removeAll();
 
             $.ajax({
                 url: url,
@@ -246,6 +272,32 @@ module ToDo {
 
             });
         }
+
+        saveToDo() {
+            var self = this;
+            var url = "http://localhost:8888/ToDoServices/api/ToDo/Update";
+            var model = {
+                Id: self.Id(),
+                Task: self.Task(),
+                DueDate: self.DueDate(),
+                ReminderDate: self.ReminderDate(),
+                Category: ko.toJS(self.SelectedCategory),
+                Priority: ko.toJS(self.SelectedPriority),
+                Status: ko.toJS(self.SelectedStatus)
+            };
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: model,
+                success: (result) => {
+
+                    var divName = '#todo-edit-modal'
+                    $(divName).modal('hide');
+
+                },
+                error: (XMLHttpRequest, textStatus, errorThrown) => { }
+            });
     }
 
 }

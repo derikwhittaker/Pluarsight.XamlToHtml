@@ -229,6 +229,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\d.ts\bootstrap\bootstrap.d.ts" />
     <Content Include="Scripts\d.ts\jquery\jquery.d.ts" />
+    <Content Include="Scripts\d.ts\jquery\jqueryui.d.ts" />
     <Content Include="Scripts\d.ts\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="ViewModels\HomeViewModel.ts" />
     <TypeScriptCompile Include="Scripts\d.ts\references.ts" />
