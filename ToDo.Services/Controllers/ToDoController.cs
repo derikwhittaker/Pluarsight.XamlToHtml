@@ -14,11 +14,15 @@ namespace ToDo.Services.Controllers
         {
             _dataRepository = dataRepository;
         }
-
         
         public IEnumerable<ToDo.Models.ToDo> Get()
         {
             return _dataRepository.AllItems();
+        }
+
+        public Models.ToDo Get(int id)
+        {
+            return _dataRepository.Item(id);
         }
 
         public void Update(Models.ToDo toDo)

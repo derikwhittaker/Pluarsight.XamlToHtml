@@ -38,8 +38,13 @@ textarea {
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/
+.validationMessage {
+    color: #f00;
+    margin-left: 5px;  
+}
 .field-validation-error {
     color: #f00;
+    margin-left: 5px;
 }
 
 .field-validation-valid {

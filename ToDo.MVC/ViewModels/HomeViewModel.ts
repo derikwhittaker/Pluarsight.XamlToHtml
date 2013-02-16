@@ -1,4 +1,6 @@
 /// <reference path="../Scripts/d.ts/references.ts" />
+/// <reference path="ToDoItemViewModel.ts" />
+/// <reference path="MaintainItemViewModel.ts" />
 
 module ToDo {
     export class HomeViewModel {
@@ -32,7 +34,7 @@ module ToDo {
 
         addNewToDo() {
             var self = this;
-            var model = new ToDoViewModel(undefined);
+            var model = new MaintainItemViewModel(undefined);
                       
             var divName = '#todo-edit-modal'
             $(divName).modal('show');
@@ -71,9 +73,7 @@ module ToDo {
         editToDo(id: number) {
             var self = this;
 
-            var model = _.find(self.OriginalToDos(), (item) => {
-                return item.Id() == id;
-            });
+            var model = new MaintainItemViewModel(id);
 
             var divName = '#todo-edit-modal'
             $(divName).modal('show');
@@ -121,8 +121,8 @@ module ToDo {
                     var temp = self.ToDos();
 
                     _.each(data, (item) => {
-                        var toDoVM = new ToDoViewModel(item);
-                        toDoVM.Parent = this;
+                        var toDoVM = new ToDoItemViewModel(item);
+
                         temp.push(toDoVM);
                     });
 
@@ -158,146 +158,6 @@ module ToDo {
             this.OriginalToDos(this.ToDos());
         }
     }
+
     
-    export class ToDoViewModel {
-        public Parent: HomeViewModel = undefined;
-        public Id: KnockoutObservableNumber = ko.observable(0);
-        public Task: KnockoutObservableString = ko.observable("");
-        public DueDate: KnockoutObservableString = ko.observable();
-        public ReminderDate: KnockoutObservableString = ko.observable();
-        public Priority: KnockoutObservableString = ko.observable("");
-        public Category: KnockoutObservableString = ko.observable("");
-        public Status: KnockoutObservableString = ko.observable("");
-        public StatusStyle: KnockoutComputed;
-        public IsCompleted: KnockoutComputed;
-        public Priorities: KnockoutObservableArray = ko.observableArray();
-        public SelectedPriority: KnockoutObservableAny = ko.observable();
-        public Categories: KnockoutObservableArray = ko.observableArray();
-        public SelectedCategory: KnockoutObservableAny = ko.observable();
-        public Statuses: KnockoutObservableArray = ko.observableArray();
-        public SelectedStatus: KnockoutObservableAny = ko.observable();
-
-        constructor(seedDto: any) {
-            if (seedDto != undefined) {
-
-                var reminderDate = seedDto.ReminderDate ? moment(seedDto.ReminderDate).format("MM/DD/YYYY") : "";
-
-                this.Id(seedDto.Id);
-                this.Task(seedDto.Task);
-                this.DueDate(moment(seedDto.DueDate).format("MM/DD/YYYY"));
-                this.ReminderDate(reminderDate);
-
-                // for mock data fetch                
-                //this.Priority(seedDto.Priority);
-                //this.Category(seedDto.Category);
-                //this.Status(seedDto.Status);
-
-                // for real data fetch
-                this.Priority(seedDto.Priority.Description);
-                this.Category(seedDto.Category.Description);
-                this.Status(seedDto.Status.Description);
-            }
-
-            this.StatusStyle = ko.computed(() => {
-                switch (this.Status()) {
-                    case "Active":
-                        return "circle status-active-color";
-                        break;
-                    case "Overdue":
-                        return "circle status-overdue-color";
-                        break;
-                    case "Completed":
-                        return "circle status-completed-color";
-                        break;
-                }
-            });
-
-            this.IsCompleted = ko.computed(() => {
-                var isCompleted = this.Status() == "Completed";
-                return isCompleted;
-            });
-        }
-
-        private remoteCallCounter = 0;
-        private totalRemoteCallsExpected = 3;
-
-        public fetchData() {
-            this.remoteCallCounter = 0;
-            this.fetchCategories();
-            this.fetchPriorities();
-            this.fetchStatuses();
-        }
-
-        fetchCategories() {
-            var self = this;
-            var url = "http://localhost:8888/ToDoServices/api/Meta/Categories";
-
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: (data) => {
-                    self.totalRemoteCallsExpected++;
-                    self.Categories(data);
-                },
-
-            });
-        }
-
-        fetchPriorities() {
-            var self = this;
-            var url = "http://localhost:8888/ToDoServices/api/Meta/Priorities";
-
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: (data) => {
-                    self.totalRemoteCallsExpected++;
-                    self.Priorities(data);
-                },
-
-            });
-        }
-
-        fetchStatuses() {
-            var self = this;
-            var url = "http://localhost:8888/ToDoServices/api/Meta/Statuses";
-
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: (data) => {
-                    self.totalRemoteCallsExpected++;
-                    self.Statuses(data);
-                },
-
-            });
-        }
-
-        saveToDo() {
-            var self = this;
-            var url = "http://localhost:8888/ToDoServices/api/ToDo/Update";
-            var model = {
-                Id: self.Id(),
-                Task: self.Task(),
-                DueDate: self.DueDate(),
-                ReminderDate: self.ReminderDate(),
-                Category: ko.toJS(self.SelectedCategory),
-                Priority: ko.toJS(self.SelectedPriority),
-                Status: ko.toJS(self.SelectedStatus)
-            };
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: model,
-                success: (result) => {
-
-                    var divName = '#todo-edit-modal'
-                    $(divName).modal('hide');
-
-                },
-                error: (XMLHttpRequest, textStatus, errorThrown) => { }
-            });
-    }
-
 }

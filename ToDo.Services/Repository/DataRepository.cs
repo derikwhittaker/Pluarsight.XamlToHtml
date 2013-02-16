@@ -15,6 +15,7 @@ namespace ToDo.Services.Repository
         IEnumerable<Category> Categories();
         IEnumerable<Status> Statuses();
         void Update(Models.ToDo toDo);
+        ToDo.Models.ToDo Item(int id);
     }
 
     public class DataRepository : IDataRepository
@@ -115,6 +116,12 @@ namespace ToDo.Services.Repository
                     _inMemeoryToDo.Add(toDo);
                 }
             }
+        }
+
+        public Models.ToDo Item(int id)
+        {
+            var foundItem = _inMemeoryToDo.FirstOrDefault(x => x.Id == id);
+            return foundItem;
         }
 
         private static Models.ToDo BuildToDo(int id, string task, DateTime duedate, DateTime? reminderDate, string priority, string category, State state)
