@@ -3,13 +3,11 @@ var ToDo;
     var MaintainItemViewModel = (function () {
         function MaintainItemViewModel(toDoId) {
             this.Parent = undefined;
+            this.OriginalToDoModel = ko.observable();
             this.Id = ko.observable(0);
             this.Task = ko.observable("");
             this.DueDate = ko.observable();
             this.ReminderDate = ko.observable();
-            this.Priority = ko.observable("");
-            this.Category = ko.observable("");
-            this.Status = ko.observable("");
             this.Priorities = ko.observableArray();
             this.SelectedPriority = ko.observable();
             this.Categories = ko.observableArray();
@@ -19,7 +17,7 @@ var ToDo;
             this.remoteCallCounter = 0;
             this.totalRemoteCallsExpected = 3;
             this.Id(toDoId);
-            this.setupValidation();
+            $("#dueDate").datepicker();
         }
         MaintainItemViewModel.prototype.setupValidation = function () {
             this.Task.extend({
@@ -34,11 +32,17 @@ var ToDo;
             this.fetchStatuses();
         };
         MaintainItemViewModel.prototype.fetchToDoItem = function () {
+            var _this = this;
             var url = "http://localhost:8888/ToDoServices/api/todo/get/" + this.Id();
             $.ajax({
                 url: url,
                 type: 'Get',
                 success: function (data) {
+                    _this.OriginalToDoModel(ko.mapping.fromJS(data));
+                    _this.Task(data.Task);
+                    _this.DueDate(data.DueDate);
+                    _this.ReminderDate(data.ReminderDate);
+                    _this.setupValidation();
                 }
             });
         };

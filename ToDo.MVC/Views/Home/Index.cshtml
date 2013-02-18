@@ -57,7 +57,10 @@
                     </tr>
                     <tr>
                         <td style="width: 150px">Due Date</td>
-                        <td><input type="date" style="width: 140px;" data-bind="value: DueDate" /></td>
+                        <td>
+                            <div id="dueDate" data-bind="text: DueDate"></div>
+                            <input type="date" style="width: 140px;" data-bind="value: DueDate" />
+                        </td>
                     </tr>
                     <tr>
                         <td style="width: 150px">Reminder Date</td>

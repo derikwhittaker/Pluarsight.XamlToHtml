@@ -230,15 +230,16 @@
     <Content Include="Scripts\d.ts\bootstrap\bootstrap.d.ts" />
     <Content Include="Scripts\d.ts\jquery\jquery.d.ts" />
     <Content Include="Scripts\d.ts\jquery\jqueryui.d.ts" />
-    <Content Include="Scripts\d.ts\knockout\knockout.d.ts" />
     <TypeScriptCompile Include="ViewModels\HomeViewModel.ts" />
     <TypeScriptCompile Include="Scripts\d.ts\references.ts" />
+    <Content Include="Scripts\d.ts\knockout\knockout.d.ts" />
     <Content Include="Scripts\d.ts\knockout\knockout.mapping-2.0.d.ts" />
     <Content Include="Scripts\d.ts\knockout\knockout.validation.d.ts" />
     <Content Include="Scripts\d.ts\moment\moment.d.ts" />
     <Content Include="Scripts\d.ts\references.js">
       <DependentUpon>references.ts</DependentUpon>
     </Content>
+    <Content Include="Scripts\d.ts\underscore\underscore.d.ts" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\moment.js" />
@@ -264,7 +265,6 @@
       <DependentUpon>ToDoItemViewModel.ts</DependentUpon>
     </Content>
     <Content Include="Views\Home\HelloWorld.cshtml" />
-    <Content Include="Scripts\d.ts\underscore\underscore.d.ts" />
     <TypeScriptCompile Include="ViewModels\HelloworldViewModel.ts" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />

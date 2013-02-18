@@ -31,6 +31,14 @@ namespace ToDo.MVC
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
+
+            bundles.Add(new StyleBundle("~/Content/jqueryUI").Include(
+                "~/Content/themes/base/jquery.ui.css",
+                "~/Content/themes/base/jquery.ui.base.css",
+                "~/Content/themes/base/jquery.ui.core.css",
+                "~/Content/themes/base/jquery.ui.datepicker.css"
+                ));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/site.css"

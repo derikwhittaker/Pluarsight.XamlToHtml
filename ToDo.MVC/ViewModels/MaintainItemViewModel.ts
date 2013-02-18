@@ -4,13 +4,11 @@
 module ToDo {
     export class MaintainItemViewModel {
         public Parent: HomeViewModel = undefined;
+        public OriginalToDoModel: KnockoutObservableAny = ko.observable();
         public Id: KnockoutObservableNumber = ko.observable(0);
         public Task: KnockoutObservableString = ko.observable("");
         public DueDate: KnockoutObservableString = ko.observable();
         public ReminderDate: KnockoutObservableString = ko.observable();
-        public Priority: KnockoutObservableString = ko.observable("");
-        public Category: KnockoutObservableString = ko.observable("");
-        public Status: KnockoutObservableString = ko.observable("");
 
         public Priorities: KnockoutObservableArray = ko.observableArray();
         public SelectedPriority: KnockoutObservableAny = ko.observable();
@@ -21,21 +19,8 @@ module ToDo {
 
         constructor(toDoId: number) {
             this.Id(toDoId);
-            //if (seedDto != undefined) {
 
-            //    var reminderDate = seedDto.ReminderDate ? moment(seedDto.ReminderDate).format("MM/DD/YYYY") : "";
-
-            //    this.Id(seedDto.Id);
-            //    this.Task(seedDto.Task);
-            //    this.DueDate(moment(seedDto.DueDate).format("MM/DD/YYYY"));
-            //    this.ReminderDate(reminderDate);
-            //    this.Priority(seedDto.Priority.Description);
-            //    this.Category(seedDto.Category.Description);
-            //    this.Status(seedDto.Status.Description);
-            //}
-
-            this.setupValidation();
-
+            $("#dueDate").datepicker();
         }
 
         private remoteCallCounter = 0;
@@ -66,7 +51,15 @@ module ToDo {
                 url: url,
                 type: 'Get',
                 success: (data) => {
+                    this.OriginalToDoModel(ko.mapping.fromJS(data));
+
+                    this.Task(data.Task);
+                    this.DueDate(data.DueDate);
+                    this.ReminderDate(data.ReminderDate);
                     
+                    // the combo boxes will be loaded as they come back with their own data
+
+                    this.setupValidation();
                 },
 
             });
@@ -97,6 +90,7 @@ module ToDo {
                 success: (data) => {
                     self.totalRemoteCallsExpected++;
                     self.Priorities(data);
+
                 },
 
             });
