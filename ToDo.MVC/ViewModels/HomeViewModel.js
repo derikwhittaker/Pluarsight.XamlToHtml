@@ -84,19 +84,13 @@ var ToDo;
             var url = "http://localhost:8888/ToDoServices/api/ToDo/";
             self.OriginalToDos.removeAll();
             self.ToDos.removeAll();
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: function (data) {
-                    var temp = self.ToDos();
-                    _.each(data, function (item) {
-                        var toDoVM = new ToDo.ToDoItemViewModel(item);
-                        temp.push(toDoVM);
-                    });
-                    self.ToDos.valueHasMutated();
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                }
+            $.get(url).done(function (data) {
+                var temp = self.ToDos();
+                _.each(data, function (item) {
+                    var toDoVM = new ToDo.ToDoItemViewModel(item);
+                    temp.push(toDoVM);
+                });
+                self.ToDos.valueHasMutated();
             });
             this.OriginalToDos(this.ToDos());
         };

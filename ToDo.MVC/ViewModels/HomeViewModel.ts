@@ -26,8 +26,7 @@ module ToDo {
                 return count;
             });
 
-            this.TotalCount = ko.computed(() => {
-                
+            this.TotalCount = ko.computed(() => {                
                 return this.ToDos().length;
             });
         }
@@ -57,7 +56,7 @@ module ToDo {
         deleteToDo(id: number) {
             var self = this;
             var url = "http://localhost:8888/ToDoServices/api/ToDo/Delete/" + id;
-            
+           
             $.ajax({
                 url: url,
                 type: 'DELETE',
@@ -86,8 +85,8 @@ module ToDo {
             });
 
             $(divName).on('hide', () => {
-
                 self.fetchRemoteToDoList();
+
                 ko.cleanNode($(divName)[0]);
                 $(divName).off('shown hide')
             });
@@ -114,10 +113,8 @@ module ToDo {
             self.OriginalToDos.removeAll();
             self.ToDos.removeAll();
 
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: (data) => {                   
+            $.get(url)
+                .done((data) => {
                     var temp = self.ToDos();
 
                     _.each(data, (item) => {
@@ -127,33 +124,7 @@ module ToDo {
                     });
 
                     self.ToDos.valueHasMutated();
-                },
-                error: (XMLHttpRequest, textStatus, errorThrown) => { }
-            });
-
-            //this.ToDos.push(new ToDoViewModel( {
-            //    Id: 1, Task: "Fix Issues w/ the Computer",
-            //    DueDate: moment().subtract('days', 2).format("MM/DD/YYYY"), ReminderDate: moment().subtract('days', 1).format("MM/DD/YYYY"),
-            //    Priority: "High", Category: "Personal", Status: "Overdue"
-            //}));
-
-            //this.ToDos.push(new ToDoViewModel({
-            //    Id: 2, Task: "Call Cable company",
-            //    DueDate: moment().format("MM/DD/YYYY"), ReminderDate: moment().format("MM/DD/YYYY"),
-            //    Priority: "High", Category: "Honey Do", Status: "Active"
-            //}));
-
-            //this.ToDos.push(new ToDoViewModel({
-            //    Id: 3, Task: "Order items from Amazon",
-            //    DueDate: moment().add('days', 2).format("MM/DD/YYYY"), ReminderDate: moment().add('days', 1).format("MM/DD/YYYY"),
-            //    Priority: "High", Category: "Personal", Status: "Active"
-            //}));
-
-            //this.ToDos.push(new ToDoViewModel({
-            //    Id: 4, Task: "Order items from Amazon",
-            //    DueDate: moment().add('days', 4).format("MM/DD/YYYY"), ReminderDate: moment().add('days', 3).format("MM/DD/YYYY"),
-            //    Priority: "High", Category: "Personal", Status: "Completed"
-            //}));
+                });
 
             this.OriginalToDos(this.ToDos());
         }

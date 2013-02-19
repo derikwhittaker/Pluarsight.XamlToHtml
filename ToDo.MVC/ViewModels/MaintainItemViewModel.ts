@@ -28,8 +28,16 @@ module ToDo {
             this.setupValidation();
         }
 
-        private remoteCallCounter = 0;
+        private remoteCallCounter = 0;        
         private totalRemoteCallsExpected = 3;
+
+        updateRemoteCallCounter() {
+            this.remoteCallCounter++;
+
+            if (this.remoteCallCounter == this.totalRemoteCallsExpected) {
+                this.fetchToDoItem();
+            }
+        }
 
         public setupValidation() {
             var self = this;
@@ -77,18 +85,11 @@ module ToDo {
                 var reminderIsValid = this.ReminderDate.isValid();
 
                 return taskIsValid && dueDateIsValid && reminderIsValid;
-            });
-
-            //ko.validation.init({
-            //    errorMessageClass: 'field-validation-error'
-            //});
-
-            
+            });   
         }
 
         public fetchData() {
             this.remoteCallCounter = 0;
-            this.fetchToDoItem();
             this.fetchCategories();
             this.fetchPriorities();
             this.fetchStatuses();
@@ -103,6 +104,7 @@ module ToDo {
 
                     this.Task(data.Task);
                     this.DueDate(moment(data.DueDate).format("MM/DD/YYYY"));
+                    this.SelectedCategory(ko.mapping.fromJS(data.Category));
 
                     if (data.ReminderDate) {
                         this.ReminderDate(moment(data.ReminderDate).format("MM/DD/YYYY"));
@@ -121,7 +123,7 @@ module ToDo {
 
             $.get(url)
                 .done((data) => {
-                    self.totalRemoteCallsExpected++;
+                    self.updateRemoteCallCounter();
                     self.Categories(data);
                 });
         }
@@ -132,7 +134,7 @@ module ToDo {
 
             $.get(url)
                  .done((data) => {
-                     self.totalRemoteCallsExpected++;
+                     self.updateRemoteCallCounter();
                      self.Priorities(data);
                  });
         }
@@ -143,7 +145,7 @@ module ToDo {
 
             $.get(url)
                  .done((data) => {
-                     self.totalRemoteCallsExpected++;
+                     self.updateRemoteCallCounter();
                      self.Statuses(data);
                  });
         }
@@ -165,18 +167,6 @@ module ToDo {
                 var divName = '#todo-edit-modal'
                 $(divName).modal('hide');
             });
-            //$.ajax({
-            //    url: url,
-            //    type: 'POST',
-            //    data: model,
-            //    success: (result) => {
-
-            //        var divName = '#todo-edit-modal'
-            //        $(divName).modal('hide');
-
-            //    },
-            //    error: (XMLHttpRequest, textStatus, errorThrown) => { }
-            //});
         }
     }
 }

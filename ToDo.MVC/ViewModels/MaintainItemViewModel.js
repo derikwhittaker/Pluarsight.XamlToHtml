@@ -21,6 +21,12 @@ var ToDo;
             $("#reminderDatePicker").datepicker();
             this.setupValidation();
         }
+        MaintainItemViewModel.prototype.updateRemoteCallCounter = function () {
+            this.remoteCallCounter++;
+            if(this.remoteCallCounter == this.totalRemoteCallsExpected) {
+                this.fetchToDoItem();
+            }
+        };
         MaintainItemViewModel.prototype.setupValidation = function () {
             var _this = this;
             var self = this;
@@ -67,7 +73,6 @@ var ToDo;
         };
         MaintainItemViewModel.prototype.fetchData = function () {
             this.remoteCallCounter = 0;
-            this.fetchToDoItem();
             this.fetchCategories();
             this.fetchPriorities();
             this.fetchStatuses();
@@ -79,6 +84,7 @@ var ToDo;
                 _this.OriginalToDoModel(ko.mapping.fromJS(data));
                 _this.Task(data.Task);
                 _this.DueDate(moment(data.DueDate).format("MM/DD/YYYY"));
+                _this.SelectedCategory(ko.mapping.fromJS(data.Category));
                 if(data.ReminderDate) {
                     _this.ReminderDate(moment(data.ReminderDate).format("MM/DD/YYYY"));
                 }
@@ -90,7 +96,7 @@ var ToDo;
             var self = this;
             var url = "http://localhost:8888/ToDoServices/api/Meta/Categories";
             $.get(url).done(function (data) {
-                self.totalRemoteCallsExpected++;
+                self.updateRemoteCallCounter();
                 self.Categories(data);
             });
         };
@@ -98,7 +104,7 @@ var ToDo;
             var self = this;
             var url = "http://localhost:8888/ToDoServices/api/Meta/Priorities";
             $.get(url).done(function (data) {
-                self.totalRemoteCallsExpected++;
+                self.updateRemoteCallCounter();
                 self.Priorities(data);
             });
         };
@@ -106,7 +112,7 @@ var ToDo;
             var self = this;
             var url = "http://localhost:8888/ToDoServices/api/Meta/Statuses";
             $.get(url).done(function (data) {
-                self.totalRemoteCallsExpected++;
+                self.updateRemoteCallCounter();
                 self.Statuses(data);
             });
         };
