@@ -17,6 +17,8 @@ module ToDo {
         public Statuses: KnockoutObservableArray = ko.observableArray();
         public SelectedStatus: KnockoutObservableAny = ko.observable();
 
+        public IsValid: KnockoutComputed;
+
         constructor(toDoId: number) {
             this.Id(toDoId);
 
@@ -32,7 +34,7 @@ module ToDo {
         public setupValidation() {
             var self = this;
             ko.validation.init();
-
+          
             this.Task.extend({
                 required: true
             });
@@ -69,6 +71,14 @@ module ToDo {
                 }
             });
 
+            this.IsValid = ko.computed(() => {
+                var taskIsValid = this.Task.isValid();
+                var dueDateIsValid = this.DueDate.isValid();
+                var reminderIsValid = this.ReminderDate.isValid();
+
+                return taskIsValid && dueDateIsValid && reminderIsValid;
+            });
+
             //ko.validation.init({
             //    errorMessageClass: 'field-validation-error'
             //});
@@ -100,7 +110,7 @@ module ToDo {
                         
                 })
                 .fail((reason) => {
-                    
+                    console.error(reason.statusText)
                 });
 
         }
@@ -109,46 +119,33 @@ module ToDo {
             var self = this;
             var url = "http://localhost:8888/ToDoServices/api/Meta/Categories";
 
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: (data) => {
+            $.get(url)
+                .done((data) => {
                     self.totalRemoteCallsExpected++;
                     self.Categories(data);
-                },
-
-            });
+                });
         }
 
         fetchPriorities() {
             var self = this;
             var url = "http://localhost:8888/ToDoServices/api/Meta/Priorities";
 
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: (data) => {
-                    self.totalRemoteCallsExpected++;
-                    self.Priorities(data);
-
-                },
-
-            });
+            $.get(url)
+                 .done((data) => {
+                     self.totalRemoteCallsExpected++;
+                     self.Priorities(data);
+                 });
         }
 
         fetchStatuses() {
             var self = this;
             var url = "http://localhost:8888/ToDoServices/api/Meta/Statuses";
 
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: (data) => {
-                    self.totalRemoteCallsExpected++;
-                    self.Statuses(data);
-                },
-
-            });
+            $.get(url)
+                 .done((data) => {
+                     self.totalRemoteCallsExpected++;
+                     self.Statuses(data);
+                 });
         }
 
         saveToDo() {
@@ -164,18 +161,22 @@ module ToDo {
                 Status: ko.toJS(self.SelectedStatus)
             };
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: model,
-                success: (result) => {
-
-                    var divName = '#todo-edit-modal'
-                    $(divName).modal('hide');
-
-                },
-                error: (XMLHttpRequest, textStatus, errorThrown) => { }
+            $.post(url, model).done((result) => {
+                var divName = '#todo-edit-modal'
+                $(divName).modal('hide');
             });
+            //$.ajax({
+            //    url: url,
+            //    type: 'POST',
+            //    data: model,
+            //    success: (result) => {
+
+            //        var divName = '#todo-edit-modal'
+            //        $(divName).modal('hide');
+
+            //    },
+            //    error: (XMLHttpRequest, textStatus, errorThrown) => { }
+            //});
         }
     }
 }
