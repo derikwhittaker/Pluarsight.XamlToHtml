@@ -58,13 +58,14 @@
                     <tr>
                         <td style="width: 150px">Due Date</td>
                         <td>
-                            <div id="dueDate" data-bind="text: DueDate"></div>
-                            <input type="date" style="width: 140px;" data-bind="value: DueDate" />
+                            <input type="text" id="dueDatePicker" style="width: 140px;" data-bind="value: DueDate" />
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 150px">Reminder Date</td>
-                        <td><input type="date" style="width: 140px;" data-bind="value: ReminderDate" /></td>
+                        <td>
+                            <input type="text" id="reminderDatePicker" style="width: 140px;" data-bind="value: ReminderDate" />
+                        </td>
                     </tr>
                     <tr>
                         <td style="width: 150px">Priority</td>

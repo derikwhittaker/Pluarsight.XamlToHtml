@@ -17,7 +17,8 @@ var ToDo;
             this.remoteCallCounter = 0;
             this.totalRemoteCallsExpected = 3;
             this.Id(toDoId);
-            $("#dueDate").datepicker();
+            $("#dueDatePicker").datepicker();
+            $("#reminderDatePicker").datepicker();
         }
         MaintainItemViewModel.prototype.setupValidation = function () {
             this.Task.extend({
@@ -40,8 +41,8 @@ var ToDo;
                 success: function (data) {
                     _this.OriginalToDoModel(ko.mapping.fromJS(data));
                     _this.Task(data.Task);
-                    _this.DueDate(data.DueDate);
-                    _this.ReminderDate(data.ReminderDate);
+                    _this.DueDate(moment(data.DueDate).format("MM/DD/YYYY"));
+                    _this.ReminderDate(moment(data.ReminderDate).format("MM/DD/YYYY"));
                     _this.setupValidation();
                 }
             });

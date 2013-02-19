@@ -20,7 +20,8 @@ module ToDo {
         constructor(toDoId: number) {
             this.Id(toDoId);
 
-            $("#dueDate").datepicker();
+            $("#dueDatePicker").datepicker();
+            $("#reminderDatePicker").datepicker();
         }
 
         private remoteCallCounter = 0;
@@ -54,8 +55,8 @@ module ToDo {
                     this.OriginalToDoModel(ko.mapping.fromJS(data));
 
                     this.Task(data.Task);
-                    this.DueDate(data.DueDate);
-                    this.ReminderDate(data.ReminderDate);
+                    this.DueDate(moment(data.DueDate).format("MM/DD/YYYY"));
+                    this.ReminderDate(moment(data.ReminderDate).format("MM/DD/YYYY"));
                     
                     // the combo boxes will be loaded as they come back with their own data
 
