@@ -22,19 +22,58 @@ module ToDo {
 
             $("#dueDatePicker").datepicker();
             $("#reminderDatePicker").datepicker();
+
+            this.setupValidation();
         }
 
         private remoteCallCounter = 0;
         private totalRemoteCallsExpected = 3;
 
         public setupValidation() {
+            var self = this;
+            ko.validation.init();
+
             this.Task.extend({
                 required: true
+            });
+
+            this.DueDate.extend({
+                date: true
+            });
+
+            this.DueDate.extend({
+                validation: {
+                    validator: function (updatedValue) {
+                        if (updatedValue == undefined) { return true; }
+
+                        var asMoment = moment(updatedValue);
+                        var result = asMoment.diff(moment(), 'days');
+                        return result >= 0;
+                    },
+                    message: 'Date cannot be in the past'
+                }
+            });
+
+            this.ReminderDate.extend({
+                validation: {
+                    validator: function (updatedValue) {
+                        if (updatedValue == undefined) { return true; }
+
+                        var asReinderDate = moment(updatedValue);
+                        var asDueDate = moment(self.DueDate());
+
+                        var result = asReinderDate.diff(asDueDate, 'days');
+                        return result <= 0;
+                    },
+                    message: 'Reminder Date must be before Due Date'
+                }
             });
 
             //ko.validation.init({
             //    errorMessageClass: 'field-validation-error'
             //});
+
+            
         }
 
         public fetchData() {
@@ -48,22 +87,22 @@ module ToDo {
         fetchToDoItem() {
             var url = "http://localhost:8888/ToDoServices/api/todo/get/" + this.Id();
 
-            $.ajax({
-                url: url,
-                type: 'Get',
-                success: (data) => {
+            $.get(url)
+                .done((data) => {
                     this.OriginalToDoModel(ko.mapping.fromJS(data));
 
                     this.Task(data.Task);
                     this.DueDate(moment(data.DueDate).format("MM/DD/YYYY"));
-                    this.ReminderDate(moment(data.ReminderDate).format("MM/DD/YYYY"));
+
+                    if (data.ReminderDate) {
+                        this.ReminderDate(moment(data.ReminderDate).format("MM/DD/YYYY"));
+                    }
+                        
+                })
+                .fail((reason) => {
                     
-                    // the combo boxes will be loaded as they come back with their own data
+                });
 
-                    this.setupValidation();
-                },
-
-            });
         }
 
         fetchCategories() {
