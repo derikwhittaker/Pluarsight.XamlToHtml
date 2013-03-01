@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
+using ToDo.Models;
 using ToDo.Xaml.Clients;
 using ToDo.Xaml.Impl;
 using ToDo.Xaml.Views;
@@ -34,6 +35,10 @@ namespace ToDo.Xaml.ViewModels
                     {
                         _toDoItems.Add(toDo);
                     }
+
+                    RaisePropertyChanged(() => ActiveCount);
+                    RaisePropertyChanged(() => OverdueCount);
+                    RaisePropertyChanged(() => TotalCount);
                 });
         }
 
@@ -143,6 +148,42 @@ namespace ToDo.Xaml.ViewModels
             foreach (var foundItem in foundItems)
             {
                 _toDoItems.Add(foundItem);
+            }
+        }
+
+        public int OverdueCount
+        {
+            get
+            {
+                if (ToDoItems.Any())
+                {
+                    return ToDoItems.Count(x => x.Status.Id == (int) State.Overdue);
+                }
+                return 0;
+            }
+        }
+
+        public int ActiveCount
+        {
+            get
+            {
+                if (ToDoItems.Any())
+                {
+                    return ToDoItems.Count(x => x.Status.Id == (int)State.Active);
+                }
+                return 0;
+            }
+        }
+
+        public int TotalCount
+        {
+            get
+            {
+                if (ToDoItems.Any())
+                {
+                    return ToDoItems.Count();
+                }
+                return 0;
             }
         }
     }
