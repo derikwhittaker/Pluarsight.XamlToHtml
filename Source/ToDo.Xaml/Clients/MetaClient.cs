@@ -19,7 +19,7 @@ namespace ToDo.Xaml.Clients
     {
         public void Categories(Action<IList<Category>> callbackAction)
         {
-            var client = new RestClient("http://localhost:33884/api/meta/categories");
+            var client = new RestClient("http://localhost:8888/ToDoServices/api/meta/categories");
             var request = new RestRequest();
 
             client.ExecuteAsync(request, (response, handle) =>
@@ -34,7 +34,7 @@ namespace ToDo.Xaml.Clients
 
         public void Priorities(Action<IList<Models.Priority>> callbackAction)
         {
-            var client = new RestClient("http://localhost:33884/api/meta/priorities");
+            var client = new RestClient("http://localhost:8888/ToDoServices/api/meta/priorities");
             var request = new RestRequest();
 
             client.ExecuteAsync<IList<Priority>>(request, (response, handle) =>
@@ -49,7 +49,7 @@ namespace ToDo.Xaml.Clients
 
         public void Statuses(Action<IList<Models.Status>> callbackAction)
         {
-            var client = new RestClient("http://localhost:33884/api/meta/Statuses");
+            var client = new RestClient("http://localhost:8888/ToDoServices/api/meta/Statuses");
             var request = new RestRequest();
 
             client.ExecuteAsync<IList<Priority>>(request, (response, handle) =>

@@ -19,7 +19,7 @@ namespace ToDo.Xaml.Clients
     {
         public void SchduledToDos( Action<IList<Models.ToDo>> callbackAction )
         {
-            var client = new RestClient("http://localhost:33884/api/ToDo");
+            var client = new RestClient("http://localhost:8888/ToDoServices/api/ToDo");
             var request = new RestRequest();
 
             client.ExecuteAsync(request, (response, handle) =>
@@ -38,7 +38,7 @@ namespace ToDo.Xaml.Clients
 
         public void DeleteToDo( int idToDelete, Action<bool> callbackAction)
         {
-            var url = string.Format("http://localhost:33884/api/ToDo/{0}", idToDelete);
+            var url = string.Format("http://localhost:8888/ToDoServices/api/ToDo/Delete/{0}", idToDelete);
             var client = new RestClient(url);
             var request = new RestRequest(Method.DELETE);
 
@@ -57,7 +57,7 @@ namespace ToDo.Xaml.Clients
 
         public void UpdateToDo(Models.ToDo toDo, Action<bool> callbackAction)
         {
-            var client = new RestClient("http://localhost:33884/api/ToDo/Update");
+            var client = new RestClient("http://localhost:8888/ToDoServices/api/ToDo/Update");
             var request = new RestRequest(Method.POST);
             request.AddObject(toDo);
             
