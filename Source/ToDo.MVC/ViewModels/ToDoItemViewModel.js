@@ -18,17 +18,7 @@ var ToDo;
             this.Category(seedData.Category.Description);
             this.Status(seedData.Status.Description);
             this.StatusStyle = ko.computed(function () {
-                switch(_this.Status()) {
-                    case "Active":
-                        return "circle status-active-color";
-                        break;
-                    case "Overdue":
-                        return "circle status-overdue-color";
-                        break;
-                    case "Completed":
-                        return "circle status-completed-color";
-                        break;
-                }
+                return "circle status-" + _this.Status().toLowerCase() + "-color";
             });
             this.IsCompleted = ko.computed(function () {
                 var isCompleted = _this.Status() == "Completed";

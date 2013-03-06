@@ -11,20 +11,7 @@ namespace ToDo.Xaml.Converters
         {
             var status = value != null ? value.ToString() : "";
 
-            switch (status)
-            {
-                case "Active":
-                    return GetStyle("ActiveStatusElipseStyle");
-
-                case "Overdue":
-                    return GetStyle("OverdueStatusElipseStyle");
-
-                case "Completed":
-                    return GetStyle("CompletedStatusElipseStyle");
-
-                default:
-                    return GetStyle("ActiveStatusElipseStyle");
-            }
+            return GetStyle(string.Format("{0}StatusElipseStyle", status));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
