@@ -4,11 +4,9 @@ var ToDo;
         var MainViewModel = (function () {
             function MainViewModel() {
                 this.ToDos = ko.observableArray();
-                var self = this;
                 this.fetchToDoItems();
             }
             MainViewModel.prototype.fetchToDoItems = function () {
-                var self = this;
                 var self = this;
                 var url = "http://localhost:8888/ToDoServices/api/ToDo/";
                 self.ToDos.removeAll();

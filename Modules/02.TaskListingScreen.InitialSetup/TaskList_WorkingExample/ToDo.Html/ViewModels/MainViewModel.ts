@@ -9,8 +9,6 @@ module ToDo.ViewModels {
         public ToDos: KnockoutObservableArray = ko.observableArray();
 
         constructor() {
-            var self = this;
-
             this.fetchToDoItems();
         }
 
@@ -22,7 +20,6 @@ module ToDo.ViewModels {
             //self.ToDos.push(ko.mapping.fromJS({ Id: 3, Task: 'Some Other Task 2', DueDate: moment().add('days', 5).format('L'), ReminderDate: moment().add('days', 4).format('L'), Priority: 'Normal', Category: 'Honey Do' }));
             //self.ToDos.push(ko.mapping.fromJS({ Id: 4, Task: 'Some Other Task 3', DueDate: moment().add('days', 6).format('L'), ReminderDate: moment().add('days', 5).format('L'), Priority: 'Normal', Category: 'Honey Do' }));
 
-            var self = this;
             var url = "http://localhost:8888/ToDoServices/api/ToDo/";
             self.ToDos.removeAll();
 

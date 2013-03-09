@@ -4,7 +4,9 @@
         <table class="table table-hover">
             <tbody data-bind="foreach: ToDos">
                 <tr>
-                    <td style="width: 15px; vertical-align: middle; padding-right: 0px;"><div class="circle status-active-color" /></td>
+                    <td style="width: 15px; vertical-align: middle; padding-right: 0px;">
+                        <div class="circle status-active-color" />
+                    </td>
                     <td style="width: 300px;"><span data-bind="text: Task" ></span></td>
                     <td style="width: 75px;"><span data-bind="text: DisplayDueDate"></span></td>
                     <td style="width: 75px;"><span data-bind="text: DisplayReminderDate"></span></td>
@@ -29,5 +31,5 @@
             ko.applyBindings(vm);
 
         })();
-</script>
+    </script>
 }
