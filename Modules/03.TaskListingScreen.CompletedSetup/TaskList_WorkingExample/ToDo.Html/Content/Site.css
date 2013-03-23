@@ -1,0 +1,58 @@
+﻿/* Custom styles */
+.table td {
+    vertical-align: middle !important;   
+}
+.table-chromeless tr td {
+  border-top: 0px;
+}
+.table-chromeless tbody tr:hover td,
+.table-chromeless tbody tr:hover th {
+  background-color: transparent;
+}
+
+.table-footerstats td {
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: center;
+}
+
+.padded-container {
+    margin: 50px auto 0 auto;
+}
+
+.no-margin {
+    margin: 0px !important;
+}
+
+.total-label-text {
+  color: #d0d0d0;
+}
+.total-value-text {
+  color: #c8d101;
+}
+
+.circle
+{
+    width: 10px;
+    height: 10px;
+    -webkit-border-radius: 10px; /* Safari, Chrome */
+       -moz-border-radius: 10px; /* Firefox */
+            border-radius: 10px; /* CSS3 */
+}
+
+.status-active-color{
+	background-color: #3089AA;
+}
+
+.status-overdue-color{
+	background-color: red;
+}
+
+.status-completed-color{
+	background-color: #C8D101;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+    font-style: italic;
+}
