@@ -1,0 +1,37 @@
+﻿<div id="todo-listing" class="container">
+    <div id="filterBar" class="container" style="margin-bottom: 10px; padding-top: 15px;">
+        <div style="float: left"></div>
+        <div style="float: right; margin-right: 18px;">
+            <input type="text" class="no-margin" placeholder="Filter ToDo's" data-bind="value: FilterText, valueUpdate: 'keyup'"/> 
+            <span data-bind="text: FilterText"></span>
+            <input type="button" class="btn btn-primary" value="Filter" style="width: 65px;"/>
+        </div>
+    </div>  
+
+    <div id="todoItems" class="container">
+        <table class="table table-hover">
+            <tbody data-bind="foreach: ToDos">
+                <tr>
+                    <td style="width: 15px; vertical-align: middle; padding-right: 0px;"><div data-bind="attr: {class: StatusStyle}" /></td>
+                    <td style="width: 300px;"><span data-bind="text: Task"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: DisplayDueDate"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: DisplayReminderDate"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: Priority().Description"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: Category().Description"></span></td>
+                    <td style="width: 75px;"><input type="button" class="btn" value="Edit" style="width: 65px;" /></td>
+                    <td style="width: 75px;"><input type="button" class="btn" value="Delete" style="width: 65px;" /></td>
+                </tr>                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        (function() {
+            var vm = new ToDo.ViewModels.MainViewModel();
+            ko.applyBindings(vm);
+        })();
+    </script>
+}

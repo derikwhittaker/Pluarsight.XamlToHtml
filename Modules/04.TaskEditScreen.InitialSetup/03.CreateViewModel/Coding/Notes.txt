@@ -1,0 +1,23 @@
+
+View Model
+
+module ToDo.ViewModels {
+    export class MaintainItemViewModel {
+
+        public Id: KnockoutObservableNumber = ko.observable(0);
+        public Task: KnockoutObservableString = ko.observable("");
+        public DueDate: KnockoutObservableString = ko.observable();
+        public ReminderDate: KnockoutObservableString = ko.observable();
+
+        public Priorities: KnockoutObservableArray = ko.observableArray();
+        public SelectedPriority: KnockoutObservableAny = ko.observable();
+        public Categories: KnockoutObservableArray = ko.observableArray();
+        public SelectedCategory: KnockoutObservableAny = ko.observable();
+        public Statuses: KnockoutObservableArray = ko.observableArray();
+        public SelectedStatus: KnockoutObservableAny = ko.observable();
+
+        constructor() {
+
+        }
+    }
+}

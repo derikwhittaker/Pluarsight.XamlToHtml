@@ -24,10 +24,12 @@ module ToDo.ViewModels {
             });
 
             this.ActiveCount = ko.computed(() => {
-                var count = _.filter(this.ToDos(), (item) => { return item.Status() == "Active" }).length;
+                var count = _.filter(this.ToDos(), (item) => {
+                                            return item.Status() == "Active"
+                                            }).length;
                 return count;
             });
-
+                
             this.TotalCount = ko.computed(() => {
                 return this.ToDos().length;
             });

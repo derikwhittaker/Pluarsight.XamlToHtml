@@ -1,0 +1,44 @@
+
+footer HTML
+
+            <tfoot>
+                <tr>
+                    <td colspan="9">
+                        <div class="pull-right">
+                            <table class="table table-chromeless table-footerstats">
+                                <tbody>
+                                    <td><span class="total-label-text">Overdue</span>&nbsp;&nbsp;<span class="total-value-text"  /></td>
+                                    <td><span class="total-label-text">Active</span>&nbsp;&nbsp;<span class="total-value-text"  /></td>
+                                    <td><span class="total-label-text">Total</span>&nbsp;&nbsp;<span class="total-value-text"  /></td>                           
+                                </tbody>
+                            </table>               
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+
+
+Styles
+
+.total-label-text {
+  color: #d0d0d0;
+}
+.total-value-text {
+  color: #c8d101;
+}
+
+            this.OverdueCount = ko.computed(() => {
+                var count = _.filter(this.ToDos(), (item) => { return item.Status().Description() == "Overdue" }).length;
+                return count;
+            });
+
+            this.ActiveCount = ko.computed(() => {
+                var count = _.filter(this.ToDos(), (item) => {
+                    return item.Status().Description() == "Active"
+                }).length;
+                return count;
+            });
+
+            this.TotalCount = ko.computed(() => {
+                return this.ToDos().length;
+            });

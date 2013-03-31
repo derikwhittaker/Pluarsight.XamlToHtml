@@ -1,0 +1,107 @@
+﻿<div id="todo-listing" class="container">
+    <div id="filterBar" class="container" style="margin-bottom: 10px; padding-top: 15px;">
+        <div style="float: left"><input type="button" class="btn btn-primary" value="Add ToDo" 
+            style="width: 100px;" data-bind="click: addNewToDo" /></div>
+        <div style="float: right; margin-right: 18px;">
+            <input type="text" class="no-margin" placeholder="Filter ToDo's"
+                   data-bind="value: FilterText, valueUpdate:'afterkeydown'" />
+            <input type="button" class="btn btn-primary" value="Filter" style="width: 65px;" 
+                   data-bind="click: filterList"/>
+        </div>
+    </div>      
+    <div id="todoItems" class="container">
+        <table class="table table-hover">
+            <tbody data-bind="foreach: ToDos">
+                <tr>
+                    <td style="width: 15px; vertical-align: middle; padding-right: 0px;">
+                        <div data-bind="attr: {class: StatusStyle}" />
+                    </td>
+                    <td style="width: 300px;"><span data-bind="text: Task, strikeThroughCompleted: Status().Description"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: DisplayDueDate, strikeThroughCompleted: Status().Description"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: DisplayReminderDate, strikeThroughCompleted: Status().Description"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: Priority().Description, strikeThroughCompleted: Status().Description"></span></td>
+                    <td style="width: 75px;"><span data-bind="text: Category().Description, strikeThroughCompleted: Status().Description"></span></td>
+                    <td style="width: 75px;"><input type="button" class="btn" value="Edit" style="width: 65px;"
+                                                    data-bind="visible: Status().Description() != 'Completed'" /></td>
+                    <td style="width: 75px;"><input type="button" class="btn" value="Delete" style="width: 65px;" 
+                                                    data-bind="click: function(data, event){$parent.deleteToDo(Id(), data, event)}, visible: Status().Description() != 'Completed'"/></td>
+                </tr>                
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="9">
+                        <div class="pull-right">
+                            <table class="table table-chromeless table-footerstats">
+                                <tbody>
+                                    <td><span class="total-label-text">Overdue</span>&nbsp;&nbsp;<span class="total-value-text" data-bind="text: OverdueCount" /></td>
+                                    <td><span class="total-label-text">Active</span>&nbsp;&nbsp;<span class="total-value-text"  data-bind="text: ActiveCount" /></td>
+                                    <td><span class="total-label-text">Total</span>&nbsp;&nbsp;<span class="total-value-text"  data-bind="text: TotalCount" /></td>                           
+                                </tbody>
+                            </table>               
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+@*Dialogs*@
+<div id="todo-edit-modal" class="modal hide fade" role="dialog">
+    <div class="modal-header pull-left">
+        <h3>Maintain To Do Item</h3>
+    </div>
+    <div class="modal-body pull-left" style="overflow: auto">
+        <form>
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width: 150px">Task</td>
+                        <td><input type="text" data-bind="value: Task, valueUpdate: 'afterkeydown'"/></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Due Date</td>
+                        <td>
+                            <input type="text" id="dueDatePicker" style="width: 140px;" data-bind="value: DueDate" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Reminder Date</td>
+                        <td>
+                            <input type="text" id="reminderDatePicker" style="width: 140px;" data-bind="value: ReminderDate" />
+                        </td>
+                    </tr>   
+                    <tr>
+                        <td style="width: 150px">Priority</td>
+                        <td><select style="width: 150px;" data-bind="options: Priorities, optionsText: 'Description', value: SelectedPriority, optionCaption: 'Choose a Prority...'" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Category</td>
+                        <td><select style="width: 150px;" data-bind="options: Categories, optionsText: 'Description', value: SelectedCategory, optionCaption: 'Choose a Category...'" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Status</td>
+                        <td><select style="width: 150px;" data-bind="options: Statuses, optionsText: 'Description', value: SelectedStatus, optionCaption: 'Choose a Status...'" /></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="modal-footer pull-right" style="width: 94.5%">
+        <button class="btn" style="width: 100px;" data-dismiss="modal">Cancel</button>
+        <button class="btn" style="width: 100px;" data-bind="click: saveToDo, enable: IsValid">Save</button>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        (function() {
+            var vm = new ToDo.ViewModels.MainViewModel();
+            ko.applyBindings(vm);
+            //var todoListing = $('#todo-listing')[0];
+            //ko.applyBindings(vm, todoListing);
+        })();
+    </script>
+}

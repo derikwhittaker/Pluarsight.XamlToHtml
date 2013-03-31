@@ -1,0 +1,53 @@
+Raw HTML
+
+<div id="todo-edit-modal" class="modal hide fade" role="dialog">
+    <div class="modal-header pull-left">
+        <h3>Maintain To Do Item</h3>
+    </div>
+    <div class="modal-body pull-left" style="overflow: auto">
+        <form>
+            <table>
+                <tbody>
+                    <tr>
+                        <td style="width: 150px">Task</td>
+                        <td><input type="text" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Due Date</td>
+                        <td>
+                            <input type="text" id="dueDatePicker" style="width: 140px;"   />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Reminder Date</td>
+                        <td>
+                            <input type="text" id="reminderDatePicker" style="width: 140px;" />
+                        </td>
+                    </tr>   
+                    <tr>
+                        <td style="width: 150px">Priority</td>
+                        <td><select style="width: 150px;" /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Category</td>
+                        <td><select style="width: 150px;"  /></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 150px">Status</td>
+                        <td><select style="width: 150px;" /></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <!-- ok putting the width of 94.5 is lame, need to fix this -->
+    <div class="modal-footer pull-right" style="width: 94.5%">
+        <button class="btn" style="width: 100px;" data-dismiss="modal">Cancel</button>
+        <button class="btn" style="width: 100px;"  >Save</button>
+    </div>
+</div>
+
+Button HTML
+        <div style="float: left"><input type="button" class="btn btn-primary" value="Add ToDo" 
+            style="width: 100px;" data-bind="click: addNewToDo" /></div>
