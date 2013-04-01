@@ -89,6 +89,7 @@ interface JQueryPromise {
     state(): string;
     pipe(doneFilter?: (x: any) => any, failFilter?: (x: any) => any, progressFilter?: (x: any) => any): JQueryPromise;
     then(doneCallbacks: any, failCallbacks?: any, progressCallbacks?: any): JQueryPromise;
+    promise(target?): JQueryPromise;
 }
 
 /*
@@ -97,8 +98,6 @@ interface JQueryPromise {
 interface JQueryDeferred extends JQueryPromise {
     notify(...args: any[]): JQueryDeferred;
     notifyWith(context: any, ...args: any[]): JQueryDeferred;
-
-    promise(target? ): JQueryPromise;
     reject(...args: any[]): JQueryDeferred;
     rejectWith(context:any, ...args: any[]): JQueryDeferred;
     resolve(...args: any[]): JQueryDeferred;
@@ -114,7 +113,7 @@ interface BaseJQueryEventObject extends Event {
     delegateTarget: Element;
     isDefaultPrevented(): bool;
     isImmediatePropogationStopped(): bool;
-    isPropogationStopped(): bool;
+    isPropagationStopped(): bool;
     namespace: string;
     preventDefault(): any;
     relatedTarget: Element;
@@ -353,6 +352,15 @@ interface JQueryStatic {
     type(obj: any): string;
 
     unique(arr: any[]): any[];
+	
+	/** 
+	* Parses a string into an array of DOM nodes.
+	*
+	* @param data HTML string to be parsed
+	* @param context DOM element to serve as the context in which the HTML fragment will be created
+	* @param keepScripts A Boolean indicating whether to include scripts passed in the HTML string
+	*/
+	parseHTML(data: string, context?: HTMLElement, keepScripts?: bool): any[];
 }
 
 /*
@@ -714,7 +722,7 @@ interface JQuery {
     ***********/
     length: number;
     selector: string;
-    [x: string]: HTMLElement;
+    [x: string]: any;
     [x: number]: HTMLElement;
 
     /**********

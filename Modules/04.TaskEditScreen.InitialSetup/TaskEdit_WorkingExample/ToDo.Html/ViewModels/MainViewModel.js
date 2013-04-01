@@ -26,8 +26,13 @@ var ToDo;
             }
             MainViewModel.prototype.addNewToDo = function () {
                 var self = this;
+                var model = new ViewModels.MaintainItemViewModel();
                 var divName = '#todo-edit-modal';
                 $(divName).modal('show');
+                $(divName).on('shown', function () {
+                    var modalDialog = $(divName)[0];
+                    ko.applyBindings(model, modalDialog);
+                });
             };
             MainViewModel.prototype.deleteToDo = function (id) {
                 var self = this;

@@ -277,6 +277,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <Content Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <Content Include="Scripts\typings\jquery\jquery.d.ts" />
     <Content Include="Scripts\typings\knockout.mapping\knockout.mapping.d.ts" />
     <Content Include="Scripts\typings\knockout.validation\knockout.validation.d.ts" />
@@ -295,6 +296,13 @@
     </Content>
     <Content Include="ViewModels\CustomKnockoutBindings.min.js">
       <DependentUpon>CustomKnockoutBindings.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="ViewModels\MaintainItemViewModel.ts" />
+    <Content Include="ViewModels\MaintainItemViewModel.js">
+      <DependentUpon>MaintainItemViewModel.ts</DependentUpon>
+    </Content>
+    <Content Include="ViewModels\MaintainItemViewModel.min.js">
+      <DependentUpon>MaintainItemViewModel.ts</DependentUpon>
     </Content>
     <Content Include="ViewModels\MainViewModel.js">
       <DependentUpon>MainViewModel.ts</DependentUpon>

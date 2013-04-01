@@ -40,24 +40,17 @@ module ToDo.ViewModels {
 
         addNewToDo() {
             var self = this;
-            //var model = new MaintainItemViewModel();
+            var model = new MaintainItemViewModel();
 
             var divName = '#todo-edit-modal'
+
             $(divName).modal('show');
 
-            //$(divName).on('shown', () => {
-            //    //model.fetchData();
+            $(divName).on('shown', () => {
+                var modalDialog = $(divName)[0];
+                ko.applyBindings(model, modalDialog);
+            });
 
-            //    //var modalDialog = $(divName)[0];
-            //    //ko.applyBindings(model, modalDialog);
-            //});
-
-            //$(divName).on('hide', () => {
-
-            //    //self.fetchRemoteToDoList();
-            //    ko.cleanNode($(divName)[0]);
-            //    $(divName).off('shown hide')
-            //});
         }
 
         deleteToDo(id: number) {

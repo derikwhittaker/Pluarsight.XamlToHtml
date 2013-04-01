@@ -1,5 +1,7 @@
+
 /// <reference path="../Scripts/typings/underscore/underscore.d.ts" />
 /// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../Scripts/typings/jqueryui/jqueryui.d.ts" />
 /// <reference path="../Scripts/typings/moment/moment.d.ts" />
 /// <reference path="../Scripts/typings/knockout/knockout.d.ts" />
 /// <reference path="../Scripts/typings/knockout.mapping/knockout.mapping.d.ts" />
@@ -20,7 +22,10 @@ module ToDo.ViewModels {
         public SelectedStatus: KnockoutObservableAny = ko.observable();
 
         constructor() {
-
+            $("#dueDatePicker").datepicker();
         }
+
+
     }
 }
+

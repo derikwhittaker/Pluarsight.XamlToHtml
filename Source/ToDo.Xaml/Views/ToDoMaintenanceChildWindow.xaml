@@ -257,7 +257,8 @@
 
             <TextBlock Grid.Row="3" Grid.Column="0" Text="Priority" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0" />
             <ComboBox Grid.Row="3" Grid.Column="1" Margin="5" 
-                      ItemsSource="{Binding Priorities}" SelectedItem="{Binding SelectedPriority, Mode=TwoWay, ValidatesOnDataErrors=True}">
+                      ItemsSource="{Binding Priorities}" 
+                      SelectedItem="{Binding SelectedPriority, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Description}" />

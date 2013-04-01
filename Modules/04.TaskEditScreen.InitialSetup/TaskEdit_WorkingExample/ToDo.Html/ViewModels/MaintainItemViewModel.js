@@ -13,6 +13,7 @@ var ToDo;
                 this.SelectedCategory = ko.observable();
                 this.Statuses = ko.observableArray();
                 this.SelectedStatus = ko.observable();
+                $("#dueDatePicker").datepicker();
             }
             return MaintainItemViewModel;
         })();

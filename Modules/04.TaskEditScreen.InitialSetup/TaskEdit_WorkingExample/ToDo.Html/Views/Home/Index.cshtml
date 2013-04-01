@@ -62,7 +62,10 @@
                     <tr>
                         <td style="width: 150px">Due Date</td>
                         <td>
-                            <input type="text" id="dueDatePicker" style="width: 140px;" data-bind="value: DueDate" />
+                            
+                            <input type="text" id="dueDatePicker" style="width: 140px;" 
+                                data-bind="value: DueDate"  />
+
                         </td>
                     </tr>
                     <tr>
@@ -99,7 +102,9 @@
     <script type="text/javascript">
         (function() {
             var vm = new ToDo.ViewModels.MainViewModel();
+
             ko.applyBindings(vm);
+
             //var todoListing = $('#todo-listing')[0];
             //ko.applyBindings(vm, todoListing);
         })();
